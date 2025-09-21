@@ -83,7 +83,7 @@ const Navbar = () => {
               <Button
                 variant="outline"
                 className={cn(
-                  "border-red-400/30 text-red-400 hover:bg-red-500/10 hover:border-red-400/60 transition-all duration-500",
+                  "border-red-400/30 hover:text-white text-red-400 hover:bg-red-500/10 hover:border-red-400/60 transition-all duration-500",
                   "hover:scale-105 hover:shadow-lg hover:shadow-red-500/20 bg-transparent backdrop-blur-sm",
                   "hover:ring-2 hover:ring-red-400/20 hover:ring-offset-2 hover:ring-offset-slate-900",
                 )}

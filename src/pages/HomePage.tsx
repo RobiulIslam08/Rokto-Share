@@ -1,6 +1,7 @@
 import HeroSection from "@/components/homePage/HeroSection";
 import StatsSection from "@/components/homePage/StatsSection";
-import FeaturesSection from "./FeaturesSection";
+import FeaturesSection from "../components/homePage/FeaturesSection";
+import TestimonialsSection from "../components/homePage/TestimonialsSection";
 
 const HomePage = () => {
 	return (
@@ -8,6 +9,7 @@ const HomePage = () => {
 			<HeroSection/>
 			<StatsSection/>
 			<FeaturesSection/>
+			<TestimonialsSection/>
 		</div>
 	);
 };

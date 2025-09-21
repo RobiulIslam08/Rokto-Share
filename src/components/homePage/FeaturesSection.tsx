@@ -1,4 +1,3 @@
-"use client";
 import { motion } from "framer-motion";
 import { Zap, ShieldCheck, Search, Bell } from "lucide-react";
 
@@ -41,7 +40,7 @@ const cardVariants = {
     transition: {
       delay: i * 0.1,
       duration: 0.5,
-      type: "spring",
+      type: "spring" as const,
       stiffness: 100,
     },
   }),

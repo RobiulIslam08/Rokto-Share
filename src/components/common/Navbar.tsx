@@ -1,11 +1,17 @@
 
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 import { Heart, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 const Navbar = () => {
+   const baseNavStyles = "relative text-slate-200 hover:text-red-400 transition-all duration-300 font-medium group px-3 py-2 rounded-lg";
+    const activeNavStyles = "text-red-400 after:w-3/4"; // ডেস্কটপের জন্য অ্যাক্টিভ স্টাইল
+
+    const baseMobileNavStyles = "text-slate-200 hover:text-red-400 transition-all duration-300 font-medium px-6 py-3 rounded-lg border-l-2 border-transparent hover:border-red-400 hover:bg-primary/10 hover:translate-x-2";
+    const activeMobileNavStyles = "text-red-400 bg-primary/10 border-red-400"; // মোবাইলের জন্য অ্যাক্টিভ স্টাইল
+
 	 const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -59,21 +65,22 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
             {navItems.map((item, index) => (
-              <Link
+              <NavLink
                 key={item.href}
                 to={item.href}
-                className={cn(
-                  "relative text-slate-200 hover:text-red-400 transition-all duration-500 font-medium group px-3 py-2 rounded-lg",
-                  "hover:scale-105 hover:-translate-y-1 hover:bg-red-500/10",
-                  "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-red-400 after:to-red-600",
-                  "after:transition-all after:duration-500 hover:after:w-3/4",
-                  "before:absolute before:inset-0 before:rounded-lg before:bg-gradient-to-r before:from-red-500/10 before:to-red-600/10 before:opacity-0 before:transition-all before:duration-300 hover:before:opacity-100",
-                  "animate-in fade-in slide-in-from-top-4",
-                )}
+                 className={({ isActive }) =>
+                                    cn(
+                                        baseNavStyles,
+                                        "hover:scale-105 hover:-translate-y-1 hover:bg-red-500/10",
+                                        "after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-gradient-to-r after:from-red-400 after:to-red-600",
+                                        "after:transition-all after:duration-500 hover:after:w-3/4",
+                                        isActive && activeNavStyles // যদি লিঙ্কটি অ্যাক্টিভ থাকে, এই স্টাইল প্রয়োগ হবে
+                                    )
+                                }
                 style={{ animationDelay: `${index * 150}ms` }}
               >
                 <span className="relative z-10">{item.label}</span>
-              </Link>
+              </NavLink>
             ))}
           </nav>
 
@@ -133,20 +140,20 @@ const Navbar = () => {
         >
           <nav className="flex flex-col space-y-2 py-6 border-t border-slate-700/50 bg-slate-800/50 backdrop-blur-sm rounded-lg">
             {navItems.map((item, index) => (
-              <Link
+              <NavLink
                 key={item.href}
                 to={item.href}
-                className={cn(
-                  "text-slate-200 hover:text-red-400 transition-all duration-500 font-medium px-6 py-3 rounded-lg",
-                  "hover:bg-gradient-to-r hover:from-red-500/10 hover:to-red-600/10 hover:scale-[1.02] hover:translate-x-2",
-                  "border-l-2 border-transparent hover:border-red-400",
-                  "animate-in fade-in slide-in-from-left-6",
-                )}
+               className={({ isActive }) => 
+                                    cn(
+                                        baseMobileNavStyles,
+                                        isActive && activeMobileNavStyles
+                                    )
+                                }
                 style={{ animationDelay: `${index * 100 + 200}ms` }}
                 onClick={() => setIsOpen(false)}
               >
                 {item.label}
-              </Link>
+              </NavLink>
             ))}
 
             {/* Mobile Auth Buttons */}

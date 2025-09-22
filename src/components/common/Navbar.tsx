@@ -20,7 +20,7 @@ const Navbar = () => {
   }, [])
 
   const navItems = [
-    { href: "/search", label: "রক্তদাতা খুঁজুন" },
+    { href: "/find-blood-donner-page", label: "রক্তদাতা খুঁজুন" },
     { href: "/donate", label: "রক্তদান করুন" },
     { href: "/about", label: "আমাদের সম্পর্কে" },
     { href: "/contact", label: "যোগাযোগ" },
@@ -48,7 +48,7 @@ const Navbar = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-2xl font-bold bg-gradient-to-r from-red-400 via-red-500 to-red-600 bg-clip-text text-transparent transition-all duration-500 group-hover:scale-105 animate-gradient bg-[length:200%_200%]">
-                BloodConnect
+              Rokto Share
               </span>
               <span className="text-xs text-slate-400 opacity-0 group-hover:opacity-100 transition-all duration-300 -mt-1">
                 জীবন বাঁচান, আশা জাগান

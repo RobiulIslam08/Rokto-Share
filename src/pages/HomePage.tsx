@@ -8,21 +8,19 @@ import DonationProcessSection from "@/components/homePage/DonationProcessSection
 import ProfileBadgeSection from "@/components/homePage/ProfileBadgeSection";
 
 const HomePage = () => {
-	return (
-		<div className="">
-			
-			<HeroSection/>
-			<StatsSection/>
-			<FeaturesSection/>
-		
-			<ProfileBadgeSection/>
-			<AwarenessSection/>
-			<CompatibilitySection/>
-			<TestimonialsSection/>
-			<DonationProcessSection/>
-		
-		</div>
-	);
+	
+  return (
+    <div className="">
+      <HeroSection />
+      <StatsSection />
+      <FeaturesSection />
+      <ProfileBadgeSection />
+      <AwarenessSection />
+      <CompatibilitySection />
+      <TestimonialsSection />
+      <DonationProcessSection />
+    </div>
+  );
 };
 
 export default HomePage;

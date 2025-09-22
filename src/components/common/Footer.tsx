@@ -7,23 +7,8 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative bg-[#2B2D42]/95 backdrop-blur-xl text-white/80 pt-32 pb-8 overflow-hidden">
-            {/* Wavy Separator SVG */}
-            <div className="absolute top-0 left-0 w-full overflow-hidden leading-none">
-                <svg
-                    data-name="Layer 1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 1200 120"
-                    preserveAspectRatio="none"
-                    className="relative block w-full h-[150px]"
-                    style={{ transform: 'translateY(-1px)' }}
-                >
-                    <path
-                        d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-                        className="fill-current text-background" // আপনার পেইজের ব্যাকগ্রাউন্ড রঙ দিন
-                    ></path>
-                </svg>
-            </div>
+        <footer className="relative bg-gray-900 backdrop-blur-xl text-white/80 pt-10  overflow-hidden">
+    
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -59,10 +44,10 @@ const Footer = () => {
                     <div>
                         <h3 className="text-xl font-semibold mb-6 text-white">দ্রুত লিংক</h3>
                         <ul className="space-y-3 text-white/60">
-                            <li><Link to="/search" className="hover:text-primary transition-colors hover:translate-x-1 inline-block">রক্তদাতা খুঁজুন</Link></li>
-                            <li><Link to="/register" className="hover:text-primary transition-colors hover:translate-x-1 inline-block">রক্তদান করুন</Link></li>
-                            <li><Link to="/emergency" className="hover:text-primary transition-colors hover:translate-x-1 inline-block">জরুরি অনুরোধ</Link></li>
-                            <li><Link to="/faq" className="hover:text-primary transition-colors hover:translate-x-1 inline-block">প্রশ্ন ও উত্তর</Link></li>
+                            <li><Link to="/search" className="hover:text-red-400  transition-colors hover:translate-x-1 inline-block">রক্তদাতা খুঁজুন</Link></li>
+                            <li><Link to="/register" className="hover:text-red-400  transition-colors hover:translate-x-1 inline-block">রক্তদান করুন</Link></li>
+                            <li><Link to="/emergency" className="hover:text-red-400  transition-colors hover:translate-x-1 inline-block">জরুরি অনুরোধ</Link></li>
+                            <li><Link to="/faq" className="hover:text-red-400  transition-colors hover:translate-x-1 inline-block">প্রশ্ন ও উত্তর</Link></li>
                         </ul>
                     </div>
                     
@@ -83,7 +68,7 @@ const Footer = () => {
                         <div className="mt-6 space-y-3 text-white/60">
                              <div className="flex items-center space-x-3">
                                  <Phone className="w-5 h-5 text-white" />
-                                 <span>+৮৮০ ১৭১২-৩৪৫৬৭৮</span>
+                                 <span>+880 1323090887</span>
                              </div>
                              <div className="flex items-center space-x-3">
                                  <MapPin className="w-5 h-5 text-white" />
@@ -94,7 +79,7 @@ const Footer = () => {
                 </div>
 
                 <div className="border-t border-white/10 mt-16 py-8 text-center text-white/50">
-                    <p>&copy; {currentYear} BloodConnect. সকল অধিকার সংরক্ষিত। ডিজাইন করেছেন [আপনার নাম/কোম্পানি]।</p>
+                    <p>&copy; {currentYear} BloodConnect. সকল অধিকার সংরক্ষিত। ডিজাইন করেছেন রাহাদুল ইসলাম।</p>
                 </div>
             </div>
         </footer>

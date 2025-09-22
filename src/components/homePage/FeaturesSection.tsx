@@ -7,7 +7,7 @@ const features = [
   {
     icon: Zap,
     title: "দ্রুত সংযোগ",
-    description: "জরুরি মুহূর্তে মুহূর্তের মধ্যে রক্তদাতা খুঁজে পান।",
+    description: "জরুরি মুহূর্তে, মুহূর্তের মধ্যে রক্তদাতা খুঁজে পান।",
     color: "from-red-500 to-orange-500",
   },
   {

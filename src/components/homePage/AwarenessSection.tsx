@@ -66,10 +66,10 @@ const AwarenessSection = () => {
             viewport={{ once: true }}
           >
             <Tabs defaultValue="eligibility" className="w-full">
-              <TabsList className="grid w-full grid-cols-3 bg-primary/10 p-2 h-auto">
-                <TabsTrigger value="eligibility" className="py-3 text-base">যোগ্যতা</TabsTrigger>
-                <TabsTrigger value="myth" className="py-3 text-base">ভুল ধারণা</TabsTrigger>
-                <TabsTrigger value="process" className="py-3 text-base">প্রক্রিয়া ও সুবিধা</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-3 bg-primary/10 p-3 h-auto">
+                <TabsTrigger value="eligibility" className="py-1 md:py-3 text-[12px] md:text-base">যোগ্যতা</TabsTrigger>
+                <TabsTrigger value="myth" className="py-1 md:py-3 text-[12px] md:text-base">ভুল ধারণা</TabsTrigger>
+                <TabsTrigger value="process" className="py-1 md:py-3 text-[12px] md:text-base">প্রক্রিয়া ও সুবিধা</TabsTrigger>
               </TabsList>
 
               <TabsContent value="eligibility" className="mt-8">

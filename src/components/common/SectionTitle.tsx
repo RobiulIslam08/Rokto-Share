@@ -14,7 +14,7 @@ const SectionTitle = ({ title, subtitle }: SectionTitleProps) => {
       viewport={{ once: true }}
       className="text-center mb-16"
     >
-      <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-red-700 bg-clip-text text-transparent">
+      <h2 className="py-3 text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-primary to-red-700 bg-clip-text text-transparent">
         {title}
       </h2>
       <p className="text-xl text-text/80 max-w-3xl mx-auto">{subtitle}</p>

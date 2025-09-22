@@ -14,9 +14,7 @@ const stats = [
 // Framer Motion-এর সাথে Shadcn Card ব্যবহারের জন্য একটি মোশন কম্পোনেন্ট তৈরি করা
 const MotionCard = motion(Card);
 
-const cardVariants = {
-  // ... (cardVariants আগের মতোই থাকবে)
-};
+
 
 const StatsSection = () => {
   return (
@@ -27,7 +25,7 @@ const StatsSection = () => {
             <MotionCard
               key={index}
               custom={index}
-              variants={cardVariants}
+              
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}

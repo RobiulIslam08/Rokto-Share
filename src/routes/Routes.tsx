@@ -2,12 +2,14 @@ import MainLayout from "@/components/layout/MainLayout";
 import AboutPage from "@/pages/AboutPage";
 import BecomeADonorPage from "@/pages/BecomeADonorPage";
 import ContactPage from "@/pages/ContactPage";
-import DashboardPage from "@/pages/DashboardPage";
+// import DashboardPage from "@/pages/DashboardPage";
 import ErrorPage from "@/pages/ErrorPage";
 import FindBloodDonnerPage from "@/pages/FindBloodDonnerPage";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import RegistrationPage from "@/pages/RegistrationPage";
+import { AdminDashboardPage } from "@/pages/dashboard/AdminDashboardPage";
+import  { UserDonorDashboardPage } from "@/pages/dashboard/UserDonorDashboardPage";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -44,10 +46,19 @@ export const router = createBrowserRouter([
 				path:'/register-page',
 				element:<RegistrationPage/>
 			},
+			// {
+			// 	path:'/dashboard-page',
+			// 	element:<DashboardPage/>
+			// },
 			{
 				path:'/dashboard-page',
-				element:<DashboardPage/>
+				element:<UserDonorDashboardPage/>
 			},
+			{
+				path:'/admin-dashboard-page',
+				element:<AdminDashboardPage/>
+			},
+
 			
 		]
 	},

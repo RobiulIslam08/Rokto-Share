@@ -28,7 +28,7 @@ const ErrorPage: React.FC = () => {
                 transition={{ delay: 0.3, duration: 0.5 }}
                 className="text-6xl md:text-8xl font-extrabold text-red-600 mb-4 drop-shadow-lg"
             >
-                ৪04
+                404
             </motion.h1>
 
             <motion.h2
@@ -64,7 +64,7 @@ const ErrorPage: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1.1, duration: 0.3 }}
                 >
-                    <Link to="/find-blood-donner" className="btn btn-outline border-red-600 text-red-600 hover:bg-red-50 flex items-center justify-center px-6 py-3 rounded-full shadow-lg transition-all duration-300">
+                    <Link to="/find-blood-donner-page" className="btn btn-outline border-red-600 text-red-600 hover:bg-red-50 flex items-center justify-center px-6 py-3 rounded-full shadow-lg transition-all duration-300">
                         <Search className="mr-2 w-5 h-5" /> রক্ত খুঁজুন
                     </Link>
                 </motion.div>
@@ -73,7 +73,7 @@ const ErrorPage: React.FC = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 1.3, duration: 0.3 }}
                 >
-                    <Link to="/become-a-donor" className="btn btn-outline border-red-600 text-red-600 hover:bg-red-50 flex items-center justify-center px-6 py-3 rounded-full shadow-lg transition-all duration-300">
+                    <Link to="/become-a-donor-page" className="btn btn-outline border-red-600 text-red-600 hover:bg-red-50 flex items-center justify-center px-6 py-3 rounded-full shadow-lg transition-all duration-300">
                         <Heart className="mr-2 w-5 h-5" /> রক্তদান করুন
                     </Link>
                 </motion.div>
@@ -85,7 +85,7 @@ const ErrorPage: React.FC = () => {
                 transition={{ delay: 1.5, duration: 0.5 }}
                 className="text-md md:text-lg font-light text-gray-500"
             >
-                এক ফোঁটা রক্ত, এক জীবনের আশা। j
+                এক ফোঁটা রক্ত, এক জীবনের আশা। 
             </motion.p>
         </motion.div>
     );

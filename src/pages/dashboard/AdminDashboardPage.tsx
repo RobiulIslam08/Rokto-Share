@@ -271,7 +271,7 @@ export const  AdminDashboardPage = () =>{
               </div>
               <div>
                 <h1 className="text-lg md:text-2xl font-bold bg-gradient-to-r from-red-600 to-red-500 bg-clip-text text-transparent">
-                  BloodConnect Admin
+                  RoktoShare Admin
                 </h1>
                 <p className="text-xs text-muted-foreground font-medium hidden md:block">
                   System Administration Panel
@@ -399,7 +399,7 @@ export const  AdminDashboardPage = () =>{
         {/* Overlay for mobile */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+            className="fixed inset-0 bg-[#cccccc]  z-30 md:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}

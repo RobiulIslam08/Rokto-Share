@@ -1,0 +1,407 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// pages/become-a-donor/components/DonorForm.tsx
+
+import React from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { Heart, User, MapPin, AlertCircle } from "lucide-react";
+
+// Props এর জন্য একটি টাইপ ডিফাইন করা ভালো
+type DonorFormProps = {
+  formData: any;
+  setFormData: (data: any) => void;
+  errors: { [key: string]: string };
+  handleSubmit: (e: React.FormEvent) => void;
+  isSubmitting: boolean;
+};
+
+// ধ্রুবকগুলো এখানে বা একটি আলাদা ফাইলে রাখা যেতে পারে
+const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+const divisions = [
+  "ঢাকা",
+  "চট্টগ্রাম",
+  "রাজশাহী",
+  "খুলনা",
+  "বরিশাল",
+  "সিলেট",
+  "রংপুর",
+  "ময়মনসিংহ",
+];
+
+export const DonorForm = ({
+  formData,
+  setFormData,
+  errors,
+  handleSubmit,
+  isSubmitting,
+}: DonorFormProps) => {
+  return (
+    <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
+      <CardHeader>
+        <CardTitle className="text-2xl text-center">রক্তদাতার তথ্য</CardTitle>
+        <CardDescription className="text-center">
+          সঠিক তথ্য দিয়ে রক্তদাতা হিসেবে নিবন্ধন করুন
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Personal Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+              <User className="w-5 h-5 text-red-600" />
+              ব্যক্তিগত তথ্য
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">পূর্ণ নাম *</Label>
+                <Input
+                  id="name"
+                  placeholder="আপনার পূর্ণ নাম"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                  className={`form-input ${
+                    errors.name ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.name && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.name}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email">ইমেইল ঠিকানা *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your@email.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                  className={`form-input ${
+                    errors.email ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.email && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.email}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="phone">মোবাইল নম্বর *</Label>
+                <Input
+                  id="phone"
+                  placeholder="01XXXXXXXXX"
+                  value={formData.phone}
+                  onChange={(e) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  className={`form-input ${
+                    errors.phone ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.phone && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.phone}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="emergencyContact">জরুরি যোগাযোগ</Label>
+                <Input
+                  id="emergencyContact"
+                  placeholder="01XXXXXXXXX"
+                  value={formData.emergencyContact}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      emergencyContact: e.target.value,
+                    })
+                  }
+                  className="form-input"
+                />
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Health Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+              <Heart className="w-5 h-5 text-red-600" />
+              স্বাস্থ্য তথ্য
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label>রক্তের গ্রুপ *</Label>
+                <Select
+                  value={formData.bloodGroup}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, bloodGroup: value })
+                  }
+                >
+                  <SelectTrigger
+                    className={`form-input ${
+                      errors.bloodGroup ? "border-red-500" : ""
+                    }`}
+                  >
+                    <SelectValue placeholder="নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {bloodGroups.map((group) => (
+                      <SelectItem key={group} value={group}>
+                        <span className="font-semibold text-red-600">
+                          {group}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.bloodGroup && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.bloodGroup}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="age">বয়স (বছর) *</Label>
+                <Input
+                  id="age"
+                  type="number"
+                  placeholder="২৫"
+                  min="18"
+                  max="65"
+                  value={formData.age}
+                  onChange={(e) =>
+                    setFormData({ ...formData, age: e.target.value })
+                  }
+                  className={`form-input ${errors.age ? "border-red-500" : ""}`}
+                />
+                {errors.age && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.age}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="weight">ওজন (কেজি) *</Label>
+                <Input
+                  id="weight"
+                  type="number"
+                  placeholder="৬০"
+                  min="45"
+                  value={formData.weight}
+                  onChange={(e) =>
+                    setFormData({ ...formData, weight: e.target.value })
+                  }
+                  className={`form-input ${
+                    errors.weight ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.weight && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.weight}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="lastDonation">শেষ রক্তদানের তারিখ (ঐচ্ছিক)</Label>
+              <Input
+                id="lastDonation"
+                type="date"
+                value={formData.lastDonation}
+                onChange={(e) =>
+                  setFormData({ ...formData, lastDonation: e.target.value })
+                }
+                className="form-input"
+              />
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Location Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-red-600" />
+              ঠিকানা
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>বিভাগ *</Label>
+                <Select
+                  value={formData.division}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, division: value })
+                  }
+                >
+                  <SelectTrigger
+                    className={`form-input ${
+                      errors.division ? "border-red-500" : ""
+                    }`}
+                  >
+                    <SelectValue placeholder="বিভাগ নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {divisions.map((division) => (
+                      <SelectItem key={division} value={division}>
+                        {division}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.division && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.division}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="district">জেলা *</Label>
+                <Input
+                  id="district"
+                  placeholder="জেলার নাম"
+                  value={formData.district}
+                  onChange={(e) =>
+                    setFormData({ ...formData, district: e.target.value })
+                  }
+                  className={`form-input ${
+                    errors.district ? "border-red-500" : ""
+                  }`}
+                />
+                {errors.district && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.district}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="address">বিস্তারিত ঠিকানা *</Label>
+              <Textarea
+                id="address"
+                placeholder="বাড়ি/রোড নম্বর, এলাকার নাম"
+                value={formData.address}
+                onChange={(e) =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
+                className={`form-input ${
+                  errors.address ? "border-red-500" : ""
+                }`}
+              />
+              {errors.address && (
+                <div className="flex items-center gap-1 text-red-500 text-sm">
+                  <AlertCircle className="w-4 h-4" />
+                  {errors.address}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Additional Information */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-800">
+              অতিরিক্ত তথ্য
+            </h3>
+
+            <div className="space-y-2">
+              <Label htmlFor="medicalHistory">চিকিৎসা ইতিহাস (ঐচ্ছিক)</Label>
+              <Textarea
+                id="medicalHistory"
+                placeholder="কোনো গুরুতর অসুখ বা অ্যালার্জি থাকলে উল্লেখ করুন"
+                value={formData.medicalHistory}
+                onChange={(e) =>
+                  setFormData({ ...formData, medicalHistory: e.target.value })
+                }
+                className="form-input"
+              />
+            </div>
+
+            <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg">
+              <div>
+                <h4 className="font-medium text-green-800">
+                  রক্তদানের জন্য উপলব্ধ
+                </h4>
+                <p className="text-sm text-green-600">
+                  জরুরি প্রয়োজনে আপনাকে যোগাযোগ করা হবে
+                </p>
+              </div>
+              <Switch
+                checked={formData.isAvailable}
+                onCheckedChange={(checked) =>
+                  setFormData({ ...formData, isAvailable: checked })
+                }
+              />
+            </div>
+          </div>
+
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg font-semibold"
+          >
+            {isSubmitting ? (
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                নিবন্ধন হচ্ছে...
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 ">
+                <Heart className="w-5 md:w-7 h-5 md:h-7" />
+                <p className="text-sm md:text-lg ">রক্তদাতা হিসেবে নিবন্ধন করুন</p>
+              </div>
+            )}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};

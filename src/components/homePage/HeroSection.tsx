@@ -66,7 +66,7 @@ const HeroSection = () => {
       ></div>
 
       <div className="container mx-auto text-center">
-        <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+        <div className="animate-in fade-in slide-in-from-bottom-8 duration-100">
           <h1 className="py-3 text-5xl md:text-7xl font-extrabold mb-4 bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent">
             আপনার রক্তে, বাঁচবে প্রাণ
           </h1>
@@ -85,7 +85,7 @@ const HeroSection = () => {
                 {/* Progress Bar */}
                 <div className="w-full bg-red-100 rounded-full h-2.5 mb-6">
                   <div
-                    className="bg-red-500 h-2.5 rounded-full transition-all duration-500 ease-out"
+                    className="bg-red-500 h-2.5 rounded-full transition-all duration-200 ease-out"
                     style={{ width: `${progressPercentage}%` }}
                   ></div>
                 </div>
@@ -93,7 +93,7 @@ const HeroSection = () => {
                 {/* Animated Question */}
                 <div
                   key={currentQuestionIndex}
-                  className="animate-in fade-in slide-in-from-right-10 duration-500"
+                  className="animate-in fade-in slide-in-from-right-10 duration-200"
                 >
                   <h3 className="text-xl md:text-2xl font-semibold text-gray-800 min-h-[60px] md:min-h-[80px] flex items-center justify-center px-4">
                     {questions[currentQuestionIndex].text}
@@ -118,7 +118,7 @@ const HeroSection = () => {
 
             {step === 2 && (
               // More celebratory animation for the result
-              <div className="animate-in fade-in zoom-in-105 duration-700">
+              <div className="animate-in fade-in zoom-in-105 duration-500">
                 {isEligible ? (
                   <>
                     <div className="relative w-24 h-24 mx-auto">

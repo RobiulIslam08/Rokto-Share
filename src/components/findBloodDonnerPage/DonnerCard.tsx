@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion } from "framer-motion";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -136,26 +133,28 @@ export const DonnerCard = ({ donor, index }: DonnerCardProps) => {
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-green-200 text-green-600 hover:bg-green-50 bg-transparent"
+                >
+                  <Phone className="w-4 h-4 mr-2" />
+                  কল করুন
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="border-blue-200 text-blue-600 hover:bg-blue-50 bg-transparent"
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  ইমেইল
+                </Button>
+              </div>
               <Button
-                variant="outline"
                 size="sm"
-                className="border-green-200 text-green-600 hover:bg-green-50 bg-transparent"
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                কল করুন
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-blue-200 text-blue-600 hover:bg-blue-50 bg-transparent"
-              >
-                <Mail className="w-4 h-4 mr-2" />
-                ইমেইল
-              </Button>
-              <Button
-                size="sm"
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-red-600 hover:bg-red-700  w-full md:w-auto "
                 disabled={!donor.isAvailable}
               >
                 অনুরোধ পাঠান

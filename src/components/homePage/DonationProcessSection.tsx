@@ -82,7 +82,7 @@ const DonationJourneySection = () => {
                             initial={{ opacity: 0, y: 50, scale: 0.95 }}
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -50, scale: 0.95 }}
-                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                            transition={{ duration: 0.8, ease: [0.1, 1, 0.3, 0.5] }}
                             className="w-full max-w-4xl mx-auto"
                         >
                             <div className="bg-card/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl p-8 md:p-12 lg:p-16">
@@ -102,7 +102,7 @@ const DonationJourneySection = () => {
                                 </div>
                                 <motion.div
                                     initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.8 } }}
+                                    animate={{ opacity: 1, transition: { delay: 0.3, duration: 0.1 } }}
                                     className="text-center mb-8"
                                 >
                                     <span
@@ -157,7 +157,7 @@ const DonationJourneySection = () => {
                     {!hasScrolled && (
                         <motion.div
                             initial={{ opacity: 0, y: 0 }}
-                            animate={{ opacity: 1, y: 20, transition: { delay: 2, duration: 1.5, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" } }}
+                            animate={{ opacity: 1, y: 20, transition: { delay: 1, duration: 1, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" } }}
                             exit={{ opacity: 0, y: 40 }}
                             className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-muted-foreground"
                         >
@@ -172,7 +172,7 @@ const DonationJourneySection = () => {
                         {journeySteps.map((_, index) => (
                             <div
                                 key={index}
-                                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                                className={`w-2 h-2 rounded-full transition-all duration-200 ${
                                     index === activeIndex ? "bg-primary w-8" : "bg-border"
                                 }`}
                             />

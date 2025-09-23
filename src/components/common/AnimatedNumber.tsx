@@ -6,7 +6,7 @@ interface AnimatedNumberProps {
 
 const AnimatedNumber = ({ value }: AnimatedNumberProps) => {
   return (
-    <CountUp end={value} duration={2.75} enableScrollSpy scrollSpyOnce />
+    <CountUp end={value} duration={0.2} enableScrollSpy scrollSpyOnce />
   );
 };
 

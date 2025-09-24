@@ -23,6 +23,8 @@ import FindBloodDonnerPage from "@/pages/FindBloodDonnerPage";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import RegistrationPage from "@/pages/RegistrationPage";
+import { AdminDashboardPage } from "@/pages/dashboard/AdminDashboardPage";
+import { UserDonorDashboardPage } from "@/pages/dashboard/UserDonorDashboardPage";
 
 // এই দুটি পেইজ এখন আর প্রয়োজন নেই কারণ আমরা একটি কেন্দ্রীয় ড্যাশবোর্ড ব্যবহার করছি
 // import { AdminDashboardPage } from "@/pages/dashboard/AdminDashboardPage";
@@ -63,6 +65,14 @@ export const router = createBrowserRouter([
       {
         path: "register-page",
         element: <RegistrationPage />,
+      },
+      {
+        path: "admin-dashboard-page",
+        element: <AdminDashboardPage />,
+      },
+      {
+        path: "dashboard-page",
+        element: <UserDonorDashboardPage />,
       },
     ],
   },

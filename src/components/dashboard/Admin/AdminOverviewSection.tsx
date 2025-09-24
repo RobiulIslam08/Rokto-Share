@@ -21,9 +21,10 @@ import {
   BarChart3,
   Shield,
   AlertTriangle,
+  Zap,
  
 } from "lucide-react";
-import { recentRequests, systemStats } from "@/lib/dashboard/admin/adminData";
+import { recentRequests, systemAlerts, systemStats } from "@/lib/dashboard/admin/adminData";
 
 const AdminOverviewSection = () => {
 	  return (

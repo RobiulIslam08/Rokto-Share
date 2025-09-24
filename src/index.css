@@ -2,7 +2,20 @@
 @import "tw-animate-css";
 
 
+@layer utilities {
+  .glass-effect {
+    /* বেসিক গ্লাস ইফেক্ট */
+    @apply bg-white/20 backdrop-blur-2xl;
 
+    /* আরও স্টাইল যোগ করা হলো */
+    @apply rounded-2xl; /* চমৎকার গোলাকার কোণা */
+    @apply border border-white/30; /* হালকা সাদা বর্ডার যা গ্লাসের প্রান্তকে ফুটিয়ে তোলে */
+    @apply shadow-xl shadow-black/10; /* গভীরতা যোগ করার জন্য শ্যাডো */
+    
+    /* ব্যাকগ্রাউন্ডের রঙকে আরও আকর্ষণীয় করার জন্য (ঐচ্ছিক) */
+    @apply backdrop-saturate-100; 
+  }
+}
 @custom-variant dark (&:is(.dark *));
 .h200{
   font-size: 200px;

@@ -7,6 +7,7 @@ import { Heart, Shield, Bell, Search, Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import React from "react";
 import type { UserRole } from "@/types";
+import { Link } from "react-router-dom";
 
 
 interface DashboardHeaderProps {
@@ -30,17 +31,21 @@ export const DashboardHeader = ({ sidebarOpen, setSidebarOpen, userRole, availab
     const subtitle = userRole === 'admin' ? "Admin Panel" : (userRole === 'donor' ? "Donor Dashboard" : "User Dashboard");
     
     return (
-        <header className="sticky top-0 z-30 glass-effect border-b border-white/20 shadow-lg">
+        <header className="sticky top-0 z-30 glass-effect border-b border-white/10 shadow-lg">
             <div className="flex h-20 items-center px-4 md:px-8 justify-between">
                 <div className="flex items-center space-x-4">
                     <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setSidebarOpen(!sidebarOpen)}>
                         {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                     </Button>
                     <div className="flex items-center space-x-3">
-                        <motion.div whileHover={{ scale: 1.1, rotate: 5 }} className="relative">
-                            <div className="absolute inset-0 bg-primary rounded-full animate-pulse-slow opacity-20"></div>
-                            {React.createElement(logoIcon, { className: "h-10 w-10 text-primary relative z-10" })}
-                        </motion.div>
+                       <Link to="/" className="flex items-center space-x-3 group">
+            <div className="relative">
+              <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-red-500/30">
+                <Heart className="w-7 h-7 text-white animate-pulse group-hover:animate-bounce" />
+              </div>
+            </div>
+        
+          </Link>
                         <div>
                             <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">{title}</h1>
                             <p className="text-xs text-muted-foreground font-medium hidden md:block">{subtitle}</p>
@@ -75,7 +80,7 @@ export const DashboardHeader = ({ sidebarOpen, setSidebarOpen, userRole, availab
                         <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10"><Search className="h-5 w-5"/></Button>
                         <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-primary/10">
                             <Bell className="h-5 w-5" />
-                            <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center rounded-full bg-primary text-white text-xs animate-pulse">
+                            <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center rounded-full bg-red-500 text-white text-xs animate-pulse">
                                 {userRole === "user" ? "2" : "5"}
                             </Badge>
                         </Button>
@@ -83,7 +88,7 @@ export const DashboardHeader = ({ sidebarOpen, setSidebarOpen, userRole, availab
                     <div className="flex items-center space-x-3">
                         <Avatar className="h-12 w-12 ring-2 ring-primary/20">
                             <AvatarImage src={`/avatars/${currentUser.name.split(' ')[0].toLowerCase()}.png`} />
-                            <AvatarFallback className="bg-primary/20 text-primary font-semibold">{currentUser.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                            <AvatarFallback className="bg-red-500 text-white font-semibold">{currentUser.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                         </Avatar>
                         <div className="hidden lg:block">
                             <p className="text-sm font-semibold">{currentUser.name}</p>

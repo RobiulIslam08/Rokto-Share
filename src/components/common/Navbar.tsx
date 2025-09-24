@@ -35,6 +35,7 @@ const Navbar = () => {
     { href: "/contact-page", label: "যোগাযোগ" },
     // { href: "/dashboard-page", label: "User Donor Dashboard" },
     // { href: "/admin-dashboard-page", label: "Admin Dashboard" },
+       { href: "/dashboard/user", label: "Dashboard" },
   ];
 
   return (

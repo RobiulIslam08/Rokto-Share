@@ -17,7 +17,8 @@ import {
   Activity, Users, Droplets, Heart,  Settings, History, Calendar, Plus,  User as UserIcon,
   Shield,
   Award,
-  AlertCircle
+  AlertCircle,
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -58,9 +59,17 @@ export const DashboardSidebar = ({ userRole, setSidebarOpen }: DashboardSidebarP
     const navItems = [...navItemsData[userRole], ...commonNavItems];
 
     return (
-        <aside className="w-full h-full glass-effect border-r border-white/20 shadow-xl">
+        <aside className="w-full h-full border-r border-white/20 shadow-xl bg-[#e5e7eb]">
             <nav className="space-y-2 md:space-y-3 p-6 h-full flex flex-col">
                 <div className="mb-8"><h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">{userRole} Menu</h3></div>
+                 <Button 
+          variant="ghost" 
+          size="icon" 
+          className="md:hidden" 
+          onClick={() => setSidebarOpen(false)}
+        >
+          <X className="h-5 w-5" />
+        </Button>
                 <div className="flex-grow space-y-2 md:space-y-3">
                     {navItems.map((item) => (
                         <NavLink

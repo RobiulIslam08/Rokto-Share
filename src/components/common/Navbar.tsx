@@ -33,8 +33,8 @@ const Navbar = () => {
     { href: "/become-a-donor-page", label: "রক্তদান করুন" },
     { href: "/about-page", label: "আমাদের সম্পর্কে" },
     { href: "/contact-page", label: "যোগাযোগ" },
-    { href: "/dashboard-page", label: "User Donor Dashboard" },
-    { href: "/admin-dashboard-page", label: "Admin Dashboard" },
+    // { href: "/dashboard-page", label: "User Donor Dashboard" },
+    // { href: "/admin-dashboard-page", label: "Admin Dashboard" },
   ];
 
   return (

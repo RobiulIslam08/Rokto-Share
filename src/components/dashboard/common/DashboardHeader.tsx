@@ -3,9 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Heart, Shield, Bell, Search, Menu, X } from "lucide-react";
-import { motion } from "framer-motion";
-import React from "react";
+import { Heart,  Bell, Search, Menu } from "lucide-react";
+
 import type { UserRole } from "@/types";
 import { Link } from "react-router-dom";
 
@@ -20,13 +19,13 @@ interface DashboardHeaderProps {
     setAvailability?: (available: boolean) => void;
 }
 
-export const DashboardHeader = ({ sidebarOpen, setSidebarOpen, userRole, availability, setAvailability }: DashboardHeaderProps) => {
+export const DashboardHeader = ({  setSidebarOpen, userRole, availability, setAvailability }: DashboardHeaderProps) => {
     const userData = { name: "Ahmed Hassan", bloodType: "O+" };
     const donorData = { name: "Rahman Ali", bloodType: "O+" };
     const adminData = { name: "Admin User", bloodType: "N/A" };
 
     const currentUser = userRole === 'admin' ? adminData : (userRole === 'donor' ? donorData : userData);
-    const logoIcon = userRole === 'admin' ? Shield : Heart;
+   
     const title = userRole === 'admin' ? "RoktoShare Admin" : "RoktoShare";
     const subtitle = userRole === 'admin' ? "Admin Panel" : (userRole === 'donor' ? "Donor Dashboard" : "User Dashboard");
     
@@ -34,8 +33,8 @@ export const DashboardHeader = ({ sidebarOpen, setSidebarOpen, userRole, availab
         <header className="sticky top-0 z-30 glass-effect border-b border-white/10 shadow-lg">
             <div className="flex h-20 items-center px-4 md:px-8 justify-between">
                 <div className="flex items-center space-x-4">
-                    <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setSidebarOpen(!sidebarOpen)}>
-                        {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                   <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setSidebarOpen(true)}>
+                        <Menu className="h-5 w-5" />
                     </Button>
                     <div className="flex items-center space-x-3">
                        <Link to="/" className="flex items-center space-x-3 group">

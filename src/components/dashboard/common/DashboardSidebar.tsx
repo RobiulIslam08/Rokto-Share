@@ -59,9 +59,9 @@ export const DashboardSidebar = ({ userRole, setSidebarOpen }: DashboardSidebarP
 
     return (
         <aside className="w-full h-full glass-effect border-r border-white/20 shadow-xl">
-            <nav className="space-y-3 p-6 h-full flex flex-col">
+            <nav className="space-y-2 md:space-y-3 p-6 h-full flex flex-col">
                 <div className="mb-8"><h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-4">{userRole} Menu</h3></div>
-                <div className="flex-grow">
+                <div className="flex-grow space-y-2 md:space-y-3">
                     {navItems.map((item) => (
                         <NavLink
                             key={item.id}
@@ -71,7 +71,7 @@ export const DashboardSidebar = ({ userRole, setSidebarOpen }: DashboardSidebarP
                             className={({ isActive }) =>
                                 cn(
                                     "w-full justify-start h-12 text-left transition-all duration-200 flex items-center px-4 rounded-lg font-medium",
-                                    isActive ? "bg-primary text-white shadow-lg shadow-primary/25" : "hover:bg-primary/10 text-text"
+                                    isActive ?  "bg-red-500 text-white shadow-lg shadow-red-500/25 hover:bg-red-600" : "hover:bg-white/50 hover:shadow-md"
                                 )
                             }
                         >
@@ -89,8 +89,11 @@ export const DashboardSidebar = ({ userRole, setSidebarOpen }: DashboardSidebarP
 				 <div className="mt-auto">
                     {userRole === 'user' && (
                         <div className="p-4 bg-gradient-to-br from-red-50 to-orange-50 rounded-xl border border-primary/20 text-center">
-                            <Button className="w-full bg-primary hover:bg-primary/90 text-white font-semibold"><AlertCircle className="mr-2 h-4 w-4" />Emergency Request</Button>
-                            <p className="text-xs text-primary/80 mt-2">For critical situations</p>
+                          <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-sm">
+                    <AlertCircle className="mr-2 h-3 w-3 md:h-4 md:w-4" />
+                    Emergency Request
+                  </Button>
+                  <p className="text-xs text-red-600 mt-2 text-center">For critical situations</p>
                         </div>
                     )}
                      {userRole === 'donor' && (

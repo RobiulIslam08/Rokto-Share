@@ -66,7 +66,7 @@ export const DashboardSidebar = ({ userRole, setSidebarOpen }: DashboardSidebarP
                         <NavLink
                             key={item.id}
                             to={item.href}
-                            end={item.href.split('/').length <= 2} // বেস রুটের জন্য end prop
+                            end // বেস রুটের জন্য end prop
                             onClick={() => setSidebarOpen(false)}
                             className={({ isActive }) =>
                                 cn(

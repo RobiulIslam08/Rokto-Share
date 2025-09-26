@@ -681,7 +681,7 @@ const RegistrationPage = () => {
             <div className="text-center pt-4 border-t">
               <p className="text-gray-600">
                 ইতিমধ্যে অ্যাকাউন্ট আছে?{" "}
-                <Link to="/login" className="text-red-600 hover:text-red-700 font-semibold hover:underline">
+                <Link to="/login-page" className="text-red-600 hover:text-red-700 font-semibold hover:underline">
                   লগইন করুন
                 </Link>
               </p>

@@ -19,13 +19,13 @@ const CTASection = () => {
               একটি রক্তদান অনেক জীবন বাঁচাতে পারে। আপনিও হয়ে উঠুন একজন জীবনদাতা।
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/register">
+              <Link to="/register-page">
                 <Button size="lg" className="bg-white text-red-600 hover:bg-red-50 px-8 py-4 text-lg font-semibold">
                   রক্তদাতা হিসেবে নিবন্ধন করুন
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
-              <Link to="/search">
+              <Link to="/find-blood-donner-page">
                 <Button
                   size="lg"
                   variant="outline"

@@ -132,7 +132,7 @@ const HeroSection = () => {
                       আপনার এই মহৎ উদ্যোগ পারে একটি জীবন বাঁচাতে। এখনই আমাদের
                       সাথে যোগ দিন।
                     </p>
-                    <Link to="/register">
+                    <Link to="/register-page">
                       <button className="w-full max-w-sm h-16 text-xl bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-lg text-white rounded-xl font-bold transition-transform transform hover:scale-105 active:scale-100">
                         এখনই নিবন্ধন করুন
                       </button>

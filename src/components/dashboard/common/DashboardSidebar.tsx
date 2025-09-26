@@ -18,7 +18,8 @@ import {
   Shield,
   Award,
   AlertCircle,
-  X
+  X,
+  Home
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -48,6 +49,7 @@ const navItemsData: Record<UserRole, NavItem[]> = {
 const commonNavItems: NavItem[] = [
     { id: "profile", label: "My Profile", icon: UserIcon, color: "text-gray-600", href: "/dashboard/profile" },
     { id: "settings", label: "Settings", icon: Settings, color: "text-gray-600", href: "/dashboard/settings" },
+    { id: "home-page", label: "Go To Home", icon: Home, color: "text-gray-600", href: "/" },
 ];
 
 interface DashboardSidebarProps {

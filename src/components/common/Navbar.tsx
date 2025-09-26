@@ -29,13 +29,14 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
+    { href: "", label: "হোমপেজ" },
     { href: "/find-blood-donner-page", label: "রক্তদাতা খুঁজুন" },
     { href: "/become-a-donor-page", label: "রক্তদান করুন" },
     { href: "/about-page", label: "আমাদের সম্পর্কে" },
     { href: "/contact-page", label: "যোগাযোগ" },
     // { href: "/dashboard-page", label: "User Donor Dashboard" },
     // { href: "/admin-dashboard-page", label: "Admin Dashboard" },
-       { href: "/dashboard/user", label: "Dashboard" },
+       { href: "/dashboard/user", label: "ড্যাশবোর্ড" },
   ];
 
   return (

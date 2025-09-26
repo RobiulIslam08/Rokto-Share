@@ -26,7 +26,7 @@ export const DashboardHeader = ({  setSidebarOpen, userRole, availability, setAv
 
     const currentUser = userRole === 'admin' ? adminData : (userRole === 'donor' ? donorData : userData);
    
-    const title = userRole === 'admin' ? "Rokto Share Admin" : "Rokto Share";
+    const title = userRole === 'admin' ? "RoktoShare Admin" : "RoktoShare";
     const subtitle = userRole === 'admin' ? "Admin Panel" : (userRole === 'donor' ? "Donor Dashboard" : "User Dashboard");
     
     return (
@@ -46,7 +46,7 @@ export const DashboardHeader = ({  setSidebarOpen, userRole, availability, setAv
         
           </Link>
                         <div>
-                          <Link to="/">   <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">{title}</h1></Link>
+                            <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary to-red-500 bg-clip-text text-transparent">{title}</h1>
                             <p className="text-xs text-muted-foreground font-medium hidden md:block">{subtitle}</p>
                         </div>
                     </div>

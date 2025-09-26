@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import type { UserRole } from "@/types";
 import { Button } from "../ui/button";
@@ -16,9 +16,10 @@ const DashboardLayout = () => {
     <div className="min-h-screen bg-background">
       {/* ডেমোর জন্য Role Switcher */}
       <div className="fixed bottom-4 right-4 z-[100] bg-white p-2 rounded-lg shadow-lg flex gap-2 border">
-        <Button size="sm" onClick={() => setUserRole('user')} variant={userRole === 'user' ? 'default' : 'outline'}>User</Button>
-        <Button size="sm" onClick={() => setUserRole('donor')} variant={userRole === 'donor' ? 'default' : 'outline'}>Donor</Button>
-        <Button size="sm" onClick={() => setUserRole('admin')} variant={userRole === 'admin' ? 'default' : 'outline'}>Admin</Button>
+        <Link to="user"><Button size="sm" onClick={() => setUserRole('user')} variant={userRole === 'user' ? 'default' : 'outline'}>User</Button></Link>
+       <Link to="donor">
+        <Button size="sm" onClick={() => setUserRole('donor')} variant={userRole === 'donor' ? 'default' : 'outline'}>Donor</Button></Link>
+        <Link to="admin"><Button size="sm" onClick={() => setUserRole('admin')} variant={userRole === 'admin' ? 'default' : 'outline'}>Admin</Button></Link>
       </div>
 
       <DashboardHeader userRole={userRole} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />

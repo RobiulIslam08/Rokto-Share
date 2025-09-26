@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Heart,  Bell, Search, Menu } from "lucide-react";
+import { Heart,  Bell, Menu } from "lucide-react";
 
 import type { UserRole } from "@/types";
 import { Link } from "react-router-dom";
@@ -76,7 +76,7 @@ export const DashboardHeader = ({  setSidebarOpen, userRole, availability, setAv
                     )}
                     
                     <div className="flex items-center space-x-3">
-                        <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10"><Search className="h-5 w-5"/></Button>
+                        
                         <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-primary/10">
                             <Bell className="h-5 w-5" />
                             <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center rounded-full bg-red-500 text-white text-xs animate-pulse">

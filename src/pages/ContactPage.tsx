@@ -34,7 +34,7 @@ const contactMethods = [
     icon: Phone,
     title: "ফোন",
     description: "সরাসরি যোগাযোগ",
-    value: "০১৭xxxxxxxx",
+    value: "01323090887",
     color: "text-red-600 bg-red-50",
     gradient: "from-red-500 to-red-600",
   },
@@ -42,7 +42,7 @@ const contactMethods = [
     icon: Mail,
     title: "ইমেইল",
     description: "যেকোনো প্রশ্নের জন্য",
-    value: "contact@roktoshare.com",
+    value: "rabiul.islam.webdev@gmail.com",
     color: "text-rose-600 bg-rose-50",
     gradient: "from-rose-500 to-rose-600",
   },
@@ -578,7 +578,7 @@ const ContactPage = () => {
                       <MapPin className="w-5 h-5 text-gray-400 mt-1" />
                       <div>
                         <h4 className="font-semibold text-gray-800">অবস্থান</h4>
-                        <p className="text-gray-600">ঢাকা, বাংলাদেশ</p>
+                        <p className="text-gray-600">শেরপুর, ময়মনসিংহ, বাংলাদেশ</p>
                       </div>
                     </div>
 

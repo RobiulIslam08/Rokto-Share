@@ -20,7 +20,7 @@ const testimonials = [
     location: "চট্টগ্রাম",
     bloodGroup: "A-",
     rating: 5,
-    text: "আমি একজন নিয়মিত রক্তদাতা। BloodConnect আমার রক্তদানের প্রক্রিয়াকে অনেক সহজ করে দিয়েছে।",
+    text: "আমি একজন নিয়মিত রক্তদাতা। RoktoShare আমার রক্তদানের প্রক্রিয়াকে অনেক সহজ করে দিয়েছে।",
     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
   },
   {
@@ -36,7 +36,7 @@ const testimonials = [
     location: "সিলেট",
     bloodGroup: "AB+",
     rating: 5,
-    text: "তাদের দ্রুত সাড়া এবং সাহায্য করার মানসিকতা প্রশংসার যোগ্য। ধন্যবাদ BloodConnect।",
+    text: "তাদের দ্রুত সাড়া এবং সাহায্য করার মানসিকতা প্রশংসার যোগ্য। ধন্যবাদ RoktoShare",
     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
   },
   {

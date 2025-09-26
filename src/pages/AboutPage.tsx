@@ -72,7 +72,7 @@ const team = [
 ]
 
 const milestones = [
-  { year: "২০২০", event: "BloodConnect প্রতিষ্ঠা", description: "স্বপ্ন থেকে বাস্তবতা" },
+  { year: "২০২০", event: "RoktoShare প্রতিষ্ঠা", description: "স্বপ্ন থেকে বাস্তবতা" },
   { year: "২০২১", event: "১০,০০০ রক্তদাতা", description: "প্রথম মাইলফলক অর্জন" },
   { year: "২০২২", event: "সারাদেশে সম্প্রসারণ", description: "৬৪ জেলায় সেবা চালু" },
   { year: "২০২৩", event: "৫০,০০০ রক্তদাতা", description: "বাংলাদেশের বৃহত্তম নেটওয়ার্ক" },
@@ -109,7 +109,7 @@ const AboutPage = () => {
               জীবন বাঁচানোর মিশন
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
-              BloodConnect বাংলাদেশের সবচেয়ে বিশ্বস্ত রক্তদান প্ল্যাটফর্ম। আমাদের লক্ষ্য হলো প্রযুক্তির মাধ্যমে রক্তদাতা এবং রক্তগ্রহীতাদের মধ্যে
+              RoktoShare বাংলাদেশের সবচেয়ে বিশ্বস্ত রক্তদান প্ল্যাটফর্ম। আমাদের লক্ষ্য হলো প্রযুক্তির মাধ্যমে রক্তদাতা এবং রক্তগ্রহীতাদের মধ্যে
               সেতুবন্ধন তৈরি করা এবং প্রতিটি জরুরি মুহূর্তে জীবন বাঁচানো।
             </p>
           </motion.div>
@@ -241,7 +241,7 @@ const AboutPage = () => {
             className="text-center mb-12"
           >
             <h3 className="text-3xl font-bold mb-4 text-gray-800">আমাদের বিশেষত্ব</h3>
-            <p className="text-gray-600">কেন BloodConnect আলাদা</p>
+            <p className="text-gray-600">কেন RoktoShare আলাদা</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

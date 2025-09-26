@@ -95,7 +95,7 @@ export const Sidebar = () => {
 						</div>
 						<div className="flex items-center gap-2">
 						  <Mail className="w-4 h-4" />
-						  <span>help@bloodconnect.bd</span>
+						  <span>help@roktoshare.bd</span>
 						</div>
 						<div className="flex items-center gap-2">
 						  <Clock className="w-4 h-4" />

@@ -8,7 +8,7 @@ const letterVariants = {
 }
 
 export const SplashScreen = () => {
-  const brandName = "BloodConnect";
+  const brandName = "RoktoShare";
   
   return (
     <motion.div

@@ -51,7 +51,7 @@ const FeaturesSection = () => {
     <section className="py-20">
       <div className="container mx-auto px-4">
         <SectionTitle
-          title="কেন BloodConnect?"
+          title="কেন RoktoShare?"
           subtitle="আধুনিক প্রযুক্তি এবং মানবিক সেবার সমন্বয়ে তৈরি বাংলাদেশের সবচেয়ে উন্নত রক্তদান প্ল্যাটফর্ম।"
         />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -209,7 +209,7 @@ const LoginPage = () => {
             <div className="text-center">
               <p className="text-gray-600">
                 অ্যাকাউন্ট নেই?{" "}
-                <Link to="/register" className="text-red-600 hover:text-red-700 font-semibold hover:underline">
+                <Link to="/register-page" className="text-red-600 hover:text-red-700 font-semibold hover:underline">
                   নিবন্ধন করুন
                 </Link>
               </p>

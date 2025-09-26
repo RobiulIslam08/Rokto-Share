@@ -48,7 +48,7 @@ const ProfileBadgeSection = () => {
                                 >
                                     <milestone.icon className={cn("w-12 h-12", milestone.color)} />
                                 </motion.div>
-                                <h3 className="text-xl font-bold text-text mt-4">{milestone.title}</h3>
+                                <h3 className="text-xl font-bold  mt-4">{milestone.title}</h3>
                                 <p className="text-sm font-semibold text-primary">{milestone.donations} বার রক্তদানের পর</p>
                             
                             </motion.div>

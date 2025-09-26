@@ -138,7 +138,7 @@ const Footer = () => {
 
         <div className="border-t border-white/10 mt-16 py-8 text-center text-white/50">
           <p>
-            &copy; {currentYear} BloodConnect. সকল অধিকার সংরক্ষিত। ডিজাইন এবং ডেভলপমেন্ট
+            &copy; {currentYear} RoktoShare. সকল অধিকার সংরক্ষিত। ডিজাইন এবং ডেভলপমেন্ট
             করেছেন রবিউল ইসলাম ( রবি )।
           </p>
         </div>

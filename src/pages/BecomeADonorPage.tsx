@@ -1,4 +1,5 @@
 
+
 "use client"
 import type React from "react"
 import { useState } from "react"
@@ -8,22 +9,21 @@ import { PageHeader } from "@/components/becomeADonorPage/PageHeader"
 import { DonorForm } from "@/components/becomeADonorPage/DonorForm"
 import { Sidebar } from "@/components/becomeADonorPage/Sidebar"
 
-
 const BecomeADonorPage = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
+    emergencyContact: "",
     bloodGroup: "",
     age: "",
     weight: "",
+    lastDonation: "",
     division: "",
     district: "",
-    address: "",
-    lastDonation: "",
+    upazila: "", 
     medicalHistory: "",
     isAvailable: true,
-    emergencyContact: "",
   })
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({})
@@ -31,11 +31,48 @@ const BecomeADonorPage = () => {
   const [showSuccess, setShowSuccess] = useState(false)
 
   const validateForm = () => {
-    // আপনার validation লজিক এখানে অপরিবর্তিত থাকবে
     const newErrors: { [key: string]: string } = {}
-    if (!formData.name.trim()) newErrors.name = "নাম আবশ্যক"
-    // ... অন্যান্য সকল validation ...
-    if (!formData.address.trim()) newErrors.address = "ঠিকানা আবশ্যক"
+
+    // Personal Info Validation
+    if (!formData.name.trim()) {
+      newErrors.name = "পূর্ণ নাম আবশ্যক"
+    }
+    if (!formData.email) {
+      newErrors.email = "ইমেইল ঠিকানা আবশ্যক"
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "সঠিক ইমেইল ঠিকানা দিন"
+    }
+    if (!formData.phone) {
+      newErrors.phone = "মোবাইল নম্বর আবশ্যক"
+    } else if (!/^01[3-9]\d{8}$/.test(formData.phone)) {
+      newErrors.phone = "সঠিক বাংলাদেশি ফোন নম্বর দিন"
+    }
+
+    // Health Info Validation
+    if (!formData.bloodGroup) {
+      newErrors.bloodGroup = "রক্তের গ্রুপ নির্বাচন করুন"
+    }
+    if (!formData.age) {
+      newErrors.age = "বয়স আবশ্যক"
+    } else if (Number.parseInt(formData.age) < 18 || Number.parseInt(formData.age) > 65) {
+      newErrors.age = "বয়স ১৮-৬৫ বছরের মধ্যে হতে হবে"
+    }
+    if (!formData.weight) {
+      newErrors.weight = "ওজন আবশ্যক"
+    } else if (Number.parseInt(formData.weight) < 45) {
+      newErrors.weight = "ওজন কমপক্ষে ৪৫ কেজি হতে হবে"
+    }
+
+    // Location Validation
+    if (!formData.division) {
+      newErrors.division = "বিভাগ নির্বাচন করুন"
+    }
+    if (!formData.district) {
+      newErrors.district = "জেলা নির্বাচন করুন"
+    }
+    if (!formData.upazila) {
+      newErrors.upazila = "উপজেলা নির্বাচন করুন"
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0

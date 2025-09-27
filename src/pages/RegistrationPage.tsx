@@ -1,6 +1,4 @@
 
-
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -10,15 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { Heart, User, Mail, Lock, Phone, MapPin, Eye, EyeOff, ArrowLeft, AlertCircle, CheckCircle } from "lucide-react"
-
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
-import { bloodGroups, districts, divisions } from "@/lib/locationData"
-
-
+// upazilas ইম্পোর্ট করা হয়েছে
+import { bloodGroups, districts, divisions, upazilas } from "@/lib/locationData"
 
 const RegistrationPage = () => {
-	 const [currentStep, setCurrentStep] = useState(1)
+  const [currentStep, setCurrentStep] = useState(1)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -39,7 +35,7 @@ const RegistrationPage = () => {
     division: "",
     district: "",
     upazila: "",
-    address: "",
+
 
     // Agreements
     agreeTerms: false,
@@ -123,9 +119,7 @@ const RegistrationPage = () => {
       newErrors.upazila = "উপজেলা আবশ্যক"
     }
 
-    if (!formData.address.trim()) {
-      newErrors.address = "ঠিকানা আবশ্যক"
-    }
+  
 
     if (!formData.agreeTerms) {
       newErrors.agreeTerms = "শর্তাবলী মেনে নিতে হবে"
@@ -322,9 +316,7 @@ const RegistrationPage = () => {
       <div className="space-y-2">
         <Label className="text-sm font-medium text-gray-700">রক্তের গ্রুপ *</Label>
         <Select value={formData.bloodGroup} onValueChange={(value) => setFormData({ ...formData, bloodGroup: value })}>
-          <SelectTrigger
-            className={`h-12 border-red-200 focus:border-red-400 ${errors.bloodGroup ? "border-red-500" : ""}`}
-          >
+          <SelectTrigger className={`h-12 w-full border-red-200 focus:border-red-400 ${errors.bloodGroup ? "border-red-500" : ""}`}>
             <SelectValue placeholder="আপনার রক্তের গ্রুপ নির্বাচন করুন" />
           </SelectTrigger>
           <SelectContent>
@@ -420,184 +412,180 @@ const RegistrationPage = () => {
     </div>
   )
 
-  const renderStep3 = () => (
-    <div className="space-y-4">
-      <div className="text-center mb-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">ঠিকানা ও চূড়ান্ত করুন</h3>
-        <p className="text-gray-600">আপনার ঠিকানা এবং সম্মতি</p>
-      </div>
+  const renderStep3 = () => {
+    // নির্বাচিত জেলার জন্য উপজেলার তালিকা খোঁজা হচ্ছে
+    const availableUpazilas = upazilas[formData.district as keyof typeof upazilas]
 
-      {/* Division */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium text-gray-700">বিভাগ *</Label>
-        <Select
-          value={formData.division}
-          onValueChange={(value) => setFormData({ ...formData, division: value, district: "" })}
-        >
-          <SelectTrigger
-            className={`h-12 border-red-200 focus:border-red-400 ${errors.division ? "border-red-500" : ""}`}
-          >
-            <SelectValue placeholder="বিভাগ নির্বাচন করুন" />
-          </SelectTrigger>
-          <SelectContent>
-            {divisions.map((division) => (
-              <SelectItem key={division} value={division}>
-                {division}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {errors.division && (
-          <div className="flex items-center gap-1 text-red-500 text-sm">
-            <AlertCircle className="w-4 h-4" />
-            {errors.division}
-          </div>
-        )}
-      </div>
+    return (
+      <div className="space-y-4">
+        <div className="text-center mb-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">ঠিকানা ও চূড়ান্ত করুন</h3>
+          <p className="text-gray-600">আপনার ঠিকানা এবং সম্মতি</p>
+        </div>
 
-      {/* District */}
-      {formData.division && (
+        {/* Division */}
         <div className="space-y-2">
-          <Label className="text-sm font-medium text-gray-700">জেলা *</Label>
-          <Select value={formData.district} onValueChange={(value) => setFormData({ ...formData, district: value })}>
-            <SelectTrigger
-              className={`h-12 border-red-200 focus:border-red-400 ${errors.district ? "border-red-500" : ""}`}
-            >
-              <SelectValue placeholder="জেলা নির্বাচন করুন" />
+          <Label className="text-sm font-medium text-gray-700">বিভাগ *</Label>
+          <Select
+            value={formData.division}
+            onValueChange={(value) => setFormData({ ...formData, division: value, district: "", upazila: "" })} // জেলা ও উপজেলা রিসেট
+          >
+            <SelectTrigger className={`h-12 w-full border-red-200 focus:border-red-400 ${errors.division ? "border-red-500" : ""}`}>
+              <SelectValue placeholder="বিভাগ নির্বাচন করুন" />
             </SelectTrigger>
             <SelectContent>
-              {districts[formData.division as keyof typeof districts]?.map((district) => (
-                <SelectItem key={district} value={district}>
-                  {district}
+              {divisions.map((division) => (
+                <SelectItem key={division} value={division}>
+                  {division}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-          {errors.district && (
+          {errors.division && (
             <div className="flex items-center gap-1 text-red-500 text-sm">
               <AlertCircle className="w-4 h-4" />
-              {errors.district}
+              {errors.division}
             </div>
           )}
         </div>
-      )}
 
-      {/* Upazila */}
-      <div className="space-y-2">
-        <Label htmlFor="upazila" className="text-sm font-medium text-gray-700">
-          উপজেলা/থানা *
-        </Label>
-        <div className="relative">
-          <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            id="upazila"
-            type="text"
-            placeholder="উপজেলা বা থানার নাম"
-            value={formData.upazila}
-            onChange={(e) => setFormData({ ...formData, upazila: e.target.value })}
-            className={`pl-10 h-12 border-red-200 focus:border-red-400 ${errors.upazila ? "border-red-500" : ""}`}
-          />
-        </div>
-        {errors.upazila && (
-          <div className="flex items-center gap-1 text-red-500 text-sm">
-            <AlertCircle className="w-4 h-4" />
-            {errors.upazila}
+        {/* District */}
+        {formData.division && (
+          <div className="space-y-2">
+            <Label className="text-sm font-medium text-gray-700">জেলা *</Label>
+            <Select
+              value={formData.district}
+              onValueChange={(value) => setFormData({ ...formData, district: value, upazila: "" })} // উপজেলা রিসেট
+            >
+              <SelectTrigger className={`h-12 w-full border-red-200 focus:border-red-400 ${errors.district ? "border-red-500" : ""}`}>
+                <SelectValue placeholder="জেলা নির্বাচন করুন" />
+              </SelectTrigger>
+              <SelectContent>
+                {districts[formData.division as keyof typeof districts]?.map((district) => (
+                  <SelectItem key={district} value={district}>
+                    {district}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.district && (
+              <div className="flex items-center gap-1 text-red-500 text-sm">
+                <AlertCircle className="w-4 h-4" />
+                {errors.district}
+              </div>
+            )}
           </div>
         )}
-      </div>
 
-      {/* Address */}
-      <div className="space-y-2">
-        <Label htmlFor="address" className="text-sm font-medium text-gray-700">
-          বিস্তারিত ঠিকানা *
-        </Label>
-        <Input
-          id="address"
-          type="text"
-          placeholder="বাড়ি/রোড নম্বর, এলাকার নাম"
-          value={formData.address}
-          onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-          className={`h-12 border-red-200 focus:border-red-400 ${errors.address ? "border-red-500" : ""}`}
-        />
-        {errors.address && (
-          <div className="flex items-center gap-1 text-red-500 text-sm">
-            <AlertCircle className="w-4 h-4" />
-            {errors.address}
-          </div>
-        )}
-      </div>
-
-      <Separator />
-
-      {/* Agreements */}
-      <div className="space-y-4">
-        <div className="flex items-start space-x-3">
-          <Checkbox
-            id="agreeTerms"
-            checked={formData.agreeTerms}
-            onCheckedChange={(checked) => setFormData({ ...formData, agreeTerms: checked as boolean })}
-            className="mt-1"
-          />
-          <Label htmlFor="agreeTerms" className="text-sm text-gray-700 leading-relaxed">
-            আমি{" "}
-            <Link to="/terms" className="text-red-600 hover:underline">
-              ব্যবহারের শর্তাবলী
-            </Link>{" "}
-            পড়েছি এবং মেনে নিচ্ছি *
+        {/* Upazila - পরিবর্তিত অংশ */}
+        <div className="space-y-2">
+          <Label htmlFor="upazila" className="text-sm font-medium text-gray-700">
+            উপজেলা/থানা *
           </Label>
+          {availableUpazilas ? (
+            // যদি উপজেলার তালিকা পাওয়া যায়, তাহলে ড্রপডাউন দেখানো হবে
+            <Select value={formData.upazila} onValueChange={(value) => setFormData({ ...formData, upazila: value })}>
+              <SelectTrigger className={`h-12 w-full border-red-200 focus:border-red-400 ${errors.upazila ? "border-red-500" : ""}`}>
+                <SelectValue placeholder="উপজেলা নির্বাচন করুন" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableUpazilas.map((upazila) => (
+                  <SelectItem key={upazila} value={upazila}>
+                    {upazila}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : (
+            // তালিকা না থাকলে ইনপুট ফিল্ড দেখানো হবে
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Input
+                id="upazila"
+                type="text"
+                placeholder="উপজেলা বা থানার নাম"
+                value={formData.upazila}
+                onChange={(e) => setFormData({ ...formData, upazila: e.target.value })}
+                className={`pl-10 h-12 border-red-200 focus:border-red-400 ${errors.upazila ? "border-red-500" : ""}`}
+              />
+            </div>
+          )}
+          {errors.upazila && (
+            <div className="flex items-center gap-1 text-red-500 text-sm">
+              <AlertCircle className="w-4 h-4" />
+              {errors.upazila}
+            </div>
+          )}
         </div>
-        {errors.agreeTerms && (
-          <div className="flex items-center gap-1 text-red-500 text-sm ml-6">
-            <AlertCircle className="w-4 h-4" />
-            {errors.agreeTerms}
-          </div>
-        )}
 
-        <div className="flex items-start space-x-3">
-          <Checkbox
-            id="agreePrivacy"
-            checked={formData.agreePrivacy}
-            onCheckedChange={(checked) => setFormData({ ...formData, agreePrivacy: checked as boolean })}
-            className="mt-1"
-          />
-          <Label htmlFor="agreePrivacy" className="text-sm text-gray-700 leading-relaxed">
-            আমি{" "}
-            <Link to="/privacy" className="text-red-600 hover:underline">
-              গোপনীয়তা নীতি
-            </Link>{" "}
-            পড়েছি এবং মেনে নিচ্ছি *
-          </Label>
-        </div>
-        {errors.agreePrivacy && (
-          <div className="flex items-center gap-1 text-red-500 text-sm ml-6">
-            <AlertCircle className="w-4 h-4" />
-            {errors.agreePrivacy}
-          </div>
-        )}
 
-        <div className="flex items-start space-x-3">
-          <Checkbox
-            id="agreeNotifications"
-            checked={formData.agreeNotifications}
-            onCheckedChange={(checked) => setFormData({ ...formData, agreeNotifications: checked as boolean })}
-            className="mt-1"
-          />
-          <Label htmlFor="agreeNotifications" className="text-sm text-gray-700 leading-relaxed">
-            জরুরি রক্তের প্রয়োজনে আমাকে নোটিফিকেশন পাঠান (সুপারিশকৃত)
-          </Label>
+        <Separator />
+
+        {/* Agreements */}
+        <div className="space-y-4">
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="agreeTerms"
+              checked={formData.agreeTerms}
+              onCheckedChange={(checked) => setFormData({ ...formData, agreeTerms: checked as boolean })}
+              className="mt-1"
+            />
+            <Label htmlFor="agreeTerms" className="text-sm text-gray-700 leading-relaxed">
+              আমি{" "}
+              <Link to="/terms" className="text-red-600 hover:underline">
+                ব্যবহারের শর্তাবলী
+              </Link>{" "}
+              পড়েছি এবং মেনে নিচ্ছি *
+            </Label>
+          </div>
+          {errors.agreeTerms && (
+            <div className="flex items-center gap-1 text-red-500 text-sm ml-6">
+              <AlertCircle className="w-4 h-4" />
+              {errors.agreeTerms}
+            </div>
+          )}
+
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="agreePrivacy"
+              checked={formData.agreePrivacy}
+              onCheckedChange={(checked) => setFormData({ ...formData, agreePrivacy: checked as boolean })}
+              className="mt-1"
+            />
+            <Label htmlFor="agreePrivacy" className="text-sm text-gray-700 leading-relaxed">
+              আমি{" "}
+              <Link to="/privacy" className="text-red-600 hover:underline">
+                গোপনীয়তা নীতি
+              </Link>{" "}
+              পড়েছি এবং মেনে নিচ্ছি *
+            </Label>
+          </div>
+          {errors.agreePrivacy && (
+            <div className="flex items-center gap-1 text-red-500 text-sm ml-6">
+              <AlertCircle className="w-4 h-4" />
+              {errors.agreePrivacy}
+            </div>
+          )}
+
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="agreeNotifications"
+              checked={formData.agreeNotifications}
+              onCheckedChange={(checked) => setFormData({ ...formData, agreeNotifications: checked as boolean })}
+              className="mt-1"
+            />
+            <Label htmlFor="agreeNotifications" className="text-sm text-gray-700 leading-relaxed">
+              জরুরি রক্তের প্রয়োজনে আমাকে নোটিফিকেশন পাঠান (সুপারিশকৃত)
+            </Label>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-2xl"
-      >
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="w-full max-w-2xl">
         {/* Back Button */}
         <Link to="/" className="inline-flex items-center text-gray-600 hover:text-red-600 mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -651,19 +639,11 @@ const RegistrationPage = () => {
                 )}
 
                 {currentStep < 3 ? (
-                  <Button
-                    type="button"
-                    onClick={handleNext}
-                    className="ml-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
-                  >
+                  <Button type="button" onClick={handleNext} className="ml-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
                     পরবর্তী
                   </Button>
                 ) : (
-                  <Button
-                    type="submit"
-                    disabled={isLoading}
-                    className="ml-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700"
-                  >
+                  <Button type="submit" disabled={isLoading} className="ml-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">
                     {isLoading ? (
                       <div className="flex items-center gap-2">
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -691,6 +671,6 @@ const RegistrationPage = () => {
       </motion.div>
     </div>
   )
-};
+}
 
-export default RegistrationPage;
+export default RegistrationPage

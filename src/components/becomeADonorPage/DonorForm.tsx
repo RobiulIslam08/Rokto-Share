@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// pages/become-a-donor/components/DonorForm.tsx
+
 
 import React from "react";
 import {
@@ -19,10 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea"; // যদিও Textarea ব্যবহার হচ্ছে না, ইম্পোর্ট রাখা যেতে পারে
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Heart, User, MapPin, AlertCircle } from "lucide-react";
+// districts এবং upazilas ইম্পোর্ট করা হয়েছে
+import { bloodGroups, divisions, districts, upazilas } from "@/lib/locationData";
 
 // Props এর জন্য একটি টাইপ ডিফাইন করা ভালো
 type DonorFormProps = {
@@ -33,19 +35,6 @@ type DonorFormProps = {
   isSubmitting: boolean;
 };
 
-// ধ্রুবকগুলো এখানে বা একটি আলাদা ফাইলে রাখা যেতে পারে
-const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
-const divisions = [
-  "ঢাকা",
-  "চট্টগ্রাম",
-  "রাজশাহী",
-  "খুলনা",
-  "বরিশাল",
-  "সিলেট",
-  "রংপুর",
-  "ময়মনসিংহ",
-];
-
 export const DonorForm = ({
   formData,
   setFormData,
@@ -53,6 +42,12 @@ export const DonorForm = ({
   handleSubmit,
   isSubmitting,
 }: DonorFormProps) => {
+  // নির্বাচিত জেলার জন্য উপজেলার তালিকা
+  const availableUpazilas =
+    formData.district && upazilas[formData.district as keyof typeof upazilas]
+      ? upazilas[formData.district as keyof typeof upazilas]
+      : [];
+
   return (
     <Card className="shadow-2xl border-0 bg-white/90 backdrop-blur-sm">
       <CardHeader>
@@ -260,20 +255,21 @@ export const DonorForm = ({
 
           <Separator />
 
-          {/* Location Information */}
+          {/* Location Information - পরিবর্তিত অংশ */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-red-600" />
               ঠিকানা
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Division Dropdown */}
               <div className="space-y-2">
                 <Label>বিভাগ *</Label>
                 <Select
                   value={formData.division}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, division: value })
+                    setFormData({ ...formData, division: value, district: "", upazila: "" })
                   }
                 >
                   <SelectTrigger
@@ -299,19 +295,33 @@ export const DonorForm = ({
                 )}
               </div>
 
+              {/* District Dropdown */}
               <div className="space-y-2">
-                <Label htmlFor="district">জেলা *</Label>
-                <Input
-                  id="district"
-                  placeholder="জেলার নাম"
+                <Label>জেলা *</Label>
+                <Select
                   value={formData.district}
-                  onChange={(e) =>
-                    setFormData({ ...formData, district: e.target.value })
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, district: value, upazila: "" })
                   }
-                  className={`form-input ${
-                    errors.district ? "border-red-500" : ""
-                  }`}
-                />
+                  disabled={!formData.division}
+                >
+                  <SelectTrigger
+                    className={`form-input ${
+                      errors.district ? "border-red-500" : ""
+                    }`}
+                  >
+                    <SelectValue placeholder="জেলা নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {districts[formData.division as keyof typeof districts]?.map(
+                      (district) => (
+                        <SelectItem key={district} value={district}>
+                          {district}
+                        </SelectItem>
+                      )
+                    )}
+                  </SelectContent>
+                </Select>
                 {errors.district && (
                   <div className="flex items-center gap-1 text-red-500 text-sm">
                     <AlertCircle className="w-4 h-4" />
@@ -319,28 +329,42 @@ export const DonorForm = ({
                   </div>
                 )}
               </div>
+
+              {/* Upazila Dropdown */}
+              <div className="space-y-2">
+                <Label>উপজেলা *</Label>
+                <Select
+                  value={formData.upazila}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, upazila: value })
+                  }
+                  disabled={!formData.district || availableUpazilas.length === 0}
+                >
+                  <SelectTrigger
+                    className={`form-input ${
+                      errors.upazila ? "border-red-500" : ""
+                    }`}
+                  >
+                    <SelectValue placeholder="উপজেলা নির্বাচন করুন" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableUpazilas.map((upazila) => (
+                      <SelectItem key={upazila} value={upazila}>
+                        {upazila}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {errors.upazila && (
+                  <div className="flex items-center gap-1 text-red-500 text-sm">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.upazila}
+                  </div>
+                )}
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="address">বিস্তারিত ঠিকানা *</Label>
-              <Textarea
-                id="address"
-                placeholder="বাড়ি/রোড নম্বর, এলাকার নাম"
-                value={formData.address}
-                onChange={(e) =>
-                  setFormData({ ...formData, address: e.target.value })
-                }
-                className={`form-input ${
-                  errors.address ? "border-red-500" : ""
-                }`}
-              />
-              {errors.address && (
-                <div className="flex items-center gap-1 text-red-500 text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.address}
-                </div>
-              )}
-            </div>
+            {/* বিস্তারিত ঠিকানা 필্ডটি বাদ দেওয়া হয়েছে */}
           </div>
 
           <Separator />
@@ -389,12 +413,12 @@ export const DonorForm = ({
             className="w-full h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg font-semibold"
           >
             {isSubmitting ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center gap-2">
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                 নিবন্ধন হচ্ছে...
               </div>
             ) : (
-              <div className="flex items-center gap-2 ">
+              <div className="flex items-center justify-center gap-2 ">
                 <Heart className="w-5 md:w-7 h-5 md:h-7" />
                 <p className="text-sm md:text-lg ">রক্তদাতা হিসেবে নিবন্ধন করুন</p>
               </div>

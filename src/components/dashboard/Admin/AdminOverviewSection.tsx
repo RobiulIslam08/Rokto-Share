@@ -71,7 +71,7 @@ const AdminOverviewSection = () => {
           {
             title: "Total Users",
             value: systemStats.totalUsers.toLocaleString(),
-            change: "+12% this month",
+         
             changeType: "positive",
             icon: Users,
             gradient: "from-blue-500 to-blue-600",
@@ -80,7 +80,7 @@ const AdminOverviewSection = () => {
           {
             title: "Active Donors",
             value: systemStats.totalDonors.toLocaleString(),
-            change: "+8% this month",
+        
             changeType: "positive",
             icon: Droplets,
             gradient: "from-red-500 to-red-600",
@@ -89,7 +89,7 @@ const AdminOverviewSection = () => {
           {
             title: "Pending Requests",
             value: systemStats.activeRequests.toString(),
-            change: "Needs attention",
+         
             changeType: "warning",
             icon: AlertCircle,
             gradient: "from-orange-500 to-orange-600",
@@ -98,7 +98,7 @@ const AdminOverviewSection = () => {
           {
             title: "Lives Impacted",
             value: systemStats.livesImpacted.toLocaleString(),
-            change: "+45 this week",
+           
             changeType: "positive",
             icon: Heart,
             gradient: "from-green-500 to-green-600",
@@ -108,25 +108,8 @@ const AdminOverviewSection = () => {
           <Card key={i} className="card-hover border-0 shadow-lg">
             <CardContent className="p-3 md:p-6">
               <div className="flex items-center justify-between mb-2 md:mb-4">
-                <div
-                  className={`p-2 md:p-3 rounded-xl bg-gradient-to-br ${stat.bgGradient}`}
-                >
-                  <stat.icon
-                    className={`h-4 w-4 md:h-6 md:w-6 bg-gradient-to-br ${stat.gradient} bg-clip-text text-transparent`}
-                  />
-                </div>
-                <Badge
-                  variant="outline"
-                  className={`text-xs ${
-                    stat.changeType === "positive"
-                      ? "border-green-200 text-green-700 bg-green-50"
-                      : stat.changeType === "warning"
-                      ? "border-orange-200 text-orange-700 bg-orange-50"
-                      : "border-blue-200 text-blue-700 bg-blue-50"
-                  }`}
-                >
-                  {stat.change}
-                </Badge>
+              
+               
               </div>
               <div>
                 <h3 className="text-xs md:text-sm font-medium text-muted-foreground mb-1 md:mb-2">

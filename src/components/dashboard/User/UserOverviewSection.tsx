@@ -80,7 +80,7 @@ const UserOverviewSection = () => {
           {
             title: "Lives Saved",
             value: "6",
-            change: "Through donations",
+            change: "By Donating",
             changeType: "positive",
             icon: Target,
             gradient: "from-green-500 to-green-600",

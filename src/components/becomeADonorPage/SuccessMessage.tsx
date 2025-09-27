@@ -24,7 +24,7 @@ export const SuccessMessage = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-4">সফলভাবে নিবন্ধিত!</h2>
             <p className="text-gray-600 mb-6">আপনার রক্তদাতা হিসেবে নিবন্ধন সম্পন্ন হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।</p>
             <div className="space-y-3">
-              <Link to="/dashboard">
+              <Link to="/dashboard/user">
                 <Button className="w-full bg-green-600 hover:bg-green-700">ড্যাশবোর্ডে যান</Button>
               </Link>
               <Link to="/">

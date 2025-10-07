@@ -101,13 +101,13 @@ const HeroSection = () => {
                   <div className="flex gap-4 mt-6 justify-center">
                     <button
                       onClick={() => handleAnswer(true)}
-                      className="flex items-center justify-center gap-2 w-36 h-16 bg-gradient-to-br from-green-50 to-green-100 text-green-800 rounded-lg font-bold text-lg border-2 border-green-200 hover:border-green-400 hover:shadow-lg transition-all transform hover:scale-105 active:scale-95"
+                      className="cursor-pointer flex items-center justify-center gap-2 w-36 h-16 bg-gradient-to-br from-green-50 to-green-100 text-green-800 rounded-lg font-bold text-lg border-2 border-green-200 hover:border-green-400 hover:shadow-lg transition-all transform hover:scale-105 active:scale-95"
                     >
                       <ThumbsUp /> হ্যাঁ
                     </button>
                     <button
                       onClick={() => handleAnswer(false)}
-                      className="flex items-center justify-center gap-2 w-36 h-16 bg-gradient-to-br from-red-50 to-red-100 text-red-800 rounded-lg font-bold text-lg border-2 border-red-200 hover:border-red-400 hover:shadow-lg transition-all transform hover:scale-105 active:scale-95"
+                      className="cursor-pointer flex items-center justify-center gap-2 w-36 h-16 bg-gradient-to-br from-red-50 to-red-100 text-red-800 rounded-lg font-bold text-lg border-2 border-red-200 hover:border-red-400 hover:shadow-lg transition-all transform hover:scale-105 active:scale-95"
                     >
                       <ThumbsDown /> না
                     </button>

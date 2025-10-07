@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-
 import React from "react";
 import {
   Card,
@@ -24,7 +23,12 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Heart, User, MapPin, AlertCircle } from "lucide-react";
 // districts এবং upazilas ইম্পোর্ট করা হয়েছে
-import { bloodGroups, divisions, districts, upazilas } from "@/lib/locationData";
+import {
+  bloodGroups,
+  divisions,
+  districts,
+  upazilas,
+} from "@/lib/locationData";
 
 // Props এর জন্য একটি টাইপ ডিফাইন করা ভালো
 type DonorFormProps = {
@@ -42,6 +46,7 @@ export const DonorForm = ({
   handleSubmit,
   isSubmitting,
 }: DonorFormProps) => {
+ 
   // নির্বাচিত জেলার জন্য উপজেলার তালিকা
   const availableUpazilas =
     formData.district && upazilas[formData.district as keyof typeof upazilas]
@@ -269,7 +274,12 @@ export const DonorForm = ({
                 <Select
                   value={formData.division}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, division: value, district: "", upazila: "" })
+                    setFormData({
+                      ...formData,
+                      division: value,
+                      district: "",
+                      upazila: "",
+                    })
                   }
                 >
                   <SelectTrigger
@@ -313,13 +323,13 @@ export const DonorForm = ({
                     <SelectValue placeholder="জেলা নির্বাচন করুন" />
                   </SelectTrigger>
                   <SelectContent>
-                    {districts[formData.division as keyof typeof districts]?.map(
-                      (district) => (
-                        <SelectItem key={district} value={district}>
-                          {district}
-                        </SelectItem>
-                      )
-                    )}
+                    {districts[
+                      formData.division as keyof typeof districts
+                    ]?.map((district) => (
+                      <SelectItem key={district} value={district}>
+                        {district}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 {errors.district && (
@@ -338,7 +348,9 @@ export const DonorForm = ({
                   onValueChange={(value) =>
                     setFormData({ ...formData, upazila: value })
                   }
-                  disabled={!formData.district || availableUpazilas.length === 0}
+                  disabled={
+                    !formData.district || availableUpazilas.length === 0
+                  }
                 >
                   <SelectTrigger
                     className={`form-input ${
@@ -410,7 +422,7 @@ export const DonorForm = ({
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="w-full h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg font-semibold"
+            className="cursor-pointer w-full h-12 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-lg font-semibold"
           >
             {isSubmitting ? (
               <div className="flex items-center justify-center gap-2">
@@ -420,7 +432,9 @@ export const DonorForm = ({
             ) : (
               <div className="flex items-center justify-center gap-2 ">
                 <Heart className="w-5 md:w-7 h-5 md:h-7" />
-                <p className="text-sm md:text-lg ">রক্তদাতা হিসেবে নিবন্ধন করুন</p>
+                <p className="text-sm md:text-lg ">
+                  রক্তদাতা হিসেবে নিবন্ধন করুন
+                </p>
               </div>
             )}
           </Button>

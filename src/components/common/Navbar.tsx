@@ -91,7 +91,7 @@ const Navbar = () => {
             <Link to="/login-page">
               <Button
                 variant="outline"
-                className="border-red-500 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105"
+                className="cursor-pointer border-red-500 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105"
               >
                 লগইন
               </Button>
@@ -99,7 +99,7 @@ const Navbar = () => {
             <Link to="/register-page">
               <Button
                 className={cn(
-                  "bg-red-600 hover:bg-red-700 text-white",
+                  "bg-red-600 hover:bg-red-700 text-white cursor-pointer",
                   "transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-red-500/20",
                   "font-semibold"
                 )}

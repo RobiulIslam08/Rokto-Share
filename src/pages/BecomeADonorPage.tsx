@@ -1,5 +1,6 @@
+
+
 "use client";
-import type React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { SuccessMessage } from "@/components/becomeADonorPage/SuccessMessage";
@@ -7,88 +8,55 @@ import { PageHeader } from "@/components/becomeADonorPage/PageHeader";
 import { DonorForm } from "@/components/becomeADonorPage/DonorForm";
 import { Sidebar } from "@/components/becomeADonorPage/Sidebar";
 
-const BecomeADonorPage = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    emergencyContact: "",
-    bloodGroup: "",
-    age: "",
-    weight: "",
-    lastDonation: "",
-    division: "",
-    district: "",
-    upazila: "",
-    medicalHistory: "",
-    isAvailable: true,
-  });
+// Form Data Type (DonorForm থেকে import করতে পারেন)
+type DonorFormData = {
+  name: string;
+  email: string;
+  phone: string;
+  emergencyContact?: string;
+  bloodGroup: string;
+  age: string;
+  weight: string;
+  lastDonation?: string;
+  division: string;
+  district: string;
+  upazila: string;
+  medicalHistory?: string;
+  isAvailable: boolean;
+};
 
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const BecomeADonorPage = () => {
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const validateForm = () => {
-    const newErrors: { [key: string]: string } = {};
-
-    // Personal Info Validation
-    if (!formData.name.trim()) {
-      newErrors.name = "পূর্ণ নাম আবশ্যক";
-    }
-    if (!formData.email) {
-      newErrors.email = "ইমেইল ঠিকানা আবশ্যক";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "সঠিক ইমেইল ঠিকানা দিন";
-    }
-    if (!formData.phone) {
-      newErrors.phone = "মোবাইল নম্বর আবশ্যক";
-    } else if (!/^01[3-9]\d{8}$/.test(formData.phone)) {
-      newErrors.phone = "সঠিক বাংলাদেশি ফোন নম্বর দিন";
-    }
-
-    // Health Info Validation
-    if (!formData.bloodGroup) {
-      newErrors.bloodGroup = "রক্তের গ্রুপ নির্বাচন করুন";
-    }
-    if (!formData.age) {
-      newErrors.age = "বয়স আবশ্যক";
-    } else if (
-      Number.parseInt(formData.age) < 18 ||
-      Number.parseInt(formData.age) > 65
-    ) {
-      newErrors.age = "বয়স ১৮-৬৫ বছরের মধ্যে হতে হবে";
-    }
-    if (!formData.weight) {
-      newErrors.weight = "ওজন আবশ্যক";
-    } else if (Number.parseInt(formData.weight) < 45) {
-      newErrors.weight = "ওজন কমপক্ষে ৪৫ কেজি হতে হবে";
-    }
-
-    // Location Validation
-    if (!formData.division) {
-      newErrors.division = "বিভাগ নির্বাচন করুন";
-    }
-    if (!formData.district) {
-      newErrors.district = "জেলা নির্বাচন করুন";
-    }
-    if (!formData.upazila) {
-      newErrors.upazila = "উপজেলা নির্বাচন করুন";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+  // Form submit handler - React Hook Form থেকে data আসবে
+  const handleFormSubmit = async (data: DonorFormData) => {
+    try {
+      // API call করুন এখানে
+      console.log("Form Data:", data);
+      
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      
+      // আপনার API call
+      // const response = await fetch('/api/donors', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(data),
+      // });
+      
+      // if (!response.ok) throw new Error('Failed to register');
+      
+      // Success এর পরে
       setShowSuccess(true);
-    }, 2000);
-
-     console.log(formData)
+      
+      // Optional: Toast notification
+      // toast.success("রক্তদাতা হিসেবে নিবন্ধন সফল হয়েছে!");
+      
+    } catch (error) {
+      console.error("Registration error:", error);
+      // Error handling
+      // toast.error("নিবন্ধনে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    }
   };
 
   if (showSuccess) {
@@ -106,13 +74,7 @@ const BecomeADonorPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <DonorForm
-                formData={formData}
-                setFormData={setFormData}
-                errors={errors}
-                handleSubmit={handleSubmit}
-                isSubmitting={isSubmitting}
-              />
+              <DonorForm onSubmit={handleFormSubmit} />
             </motion.div>
           </div>
           <Sidebar />

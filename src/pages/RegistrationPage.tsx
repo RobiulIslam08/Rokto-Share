@@ -81,6 +81,19 @@ const formSchema = z
       .refine((val) => parseInt(val, 10) >= 45, {
         message: "ওজন কমপক্ষে ৪৫ কেজি হতে হবে",
       }),
+       previousDonations: z
+      .string()
+      .optional()
+      .refine(
+        (val) => {
+          if (!val) return true;
+          const num = parseInt(val, 10);
+          return !isNaN(num) && num >= 0;
+        },
+        {
+          message: "সঠিক সংখ্যা দিন (যেমন: ০, ৫, ১৫)",
+        }
+      ),
     lastDonation: z.string().optional(),
     medicalHistory: z.string().optional(),
 
@@ -106,6 +119,7 @@ const step2Fields: (keyof z.infer<typeof formSchema>)[] = [
   "bloodGroup",
   "age",
   "weight",
+   "previousDonations",
 ];
 
 const RegistrationPage = () => {
@@ -122,6 +136,7 @@ const RegistrationPage = () => {
       phone: "",
       password: "",
       confirmPassword: "",
+      previousDonations: "",
       bloodGroup: "",
       age: "",
       weight: "",
@@ -384,6 +399,29 @@ const RegistrationPage = () => {
           )}
         />
       </div>
+
+      <FormField 
+      control={form.control}
+      name="previousDonations"
+      render={({field})=>(
+  <FormItem>
+          <FormLabel> পূর্বে কতবার রক্তদান করেছেন (ঐচ্ছিক) </FormLabel>
+            <FormControl>
+              <Input
+              type="number"
+              placeholder="যেমন: 4"
+              min="0"
+              {...field}
+
+              className="h-12 border-red-200 focus:border-red-400"
+              />
+            </FormControl>
+         
+        </FormItem>
+      )}
+      >
+      
+      </FormField>
       <FormField
         control={form.control}
         name="lastDonation"

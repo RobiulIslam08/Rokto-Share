@@ -10,19 +10,20 @@ import { Sidebar } from "@/components/becomeADonorPage/Sidebar";
 
 // Form Data Type (DonorForm থেকে import করতে পারেন)
 type DonorFormData = {
-  name: string;
-  email: string;
-  phone: string;
-  emergencyContact?: string;
-  bloodGroup: string;
-  age: string;
-  weight: string;
-  lastDonation?: string;
-  division: string;
-  district: string;
-  upazila: string;
-  medicalHistory?: string;
-  isAvailable: boolean;
+    name: string;
+    email: string;
+    phone: string;
+    password: string;
+    confirmPassword: string; 
+    bloodGroup: string;
+    age: number; 
+    weight: number; 
+    division: string;
+    district: string;
+    upazila: string;
+    isAvailable: boolean;
+    lastDonation?: string;
+    medicalHistory?: string;
 };
 
 const BecomeADonorPage = () => {

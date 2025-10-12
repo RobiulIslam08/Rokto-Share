@@ -66,10 +66,11 @@ const donorFormSchema = z
     district: z.string().min(1, { message: "জেলা নির্বাচন করুন" }),
     upazila: z.string().min(1, { message: "উপজেলা নির্বাচন করুন" }),
     medicalHistory: z.string().optional(),
-previousDonations: z.coerce
-  .number()
-  .min(0, { message: "সঠিক সংখ্যা দিন (যেমন: ০, ৫, ১৫)" })
-  .optional(),    isAvailable: z.boolean().default(true),
+    previousDonations: z.coerce
+      .number()
+      .min(0, { message: "সঠিক সংখ্যা দিন (যেমন: ০, ৫, ১৫)" })
+      .optional(),
+    isAvailable: z.boolean().default(true),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "পাসওয়ার্ড মিলছে না",
@@ -104,7 +105,7 @@ export const DonorForm = ({ onSubmit, defaultValues }: DonorFormProps) => {
       phone: "",
       password: "",
       confirmPassword: "",
-      previousDonations:"",
+      previousDonations: "",
       bloodGroup: "",
       age: undefined,
       weight: undefined,
@@ -328,7 +329,7 @@ export const DonorForm = ({ onSubmit, defaultValues }: DonorFormProps) => {
                   type="number"
                   {...register("previousDonations")}
                 />
-                   {renderErrorMessage(errors.previousDonations?.message)}
+                {renderErrorMessage(errors.previousDonations?.message)}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="lastDonation">

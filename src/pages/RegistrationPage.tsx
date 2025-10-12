@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,6 +50,11 @@ import {
   divisions,
   upazilas,
 } from "@/lib/locationData";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useRegisterDonorMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
+import { toast } from "sonner";
 
 // Zod ভ্যালিডেশন স্কিমা তৈরি
 const formSchema = z
@@ -81,7 +88,7 @@ const formSchema = z
       .refine((val) => parseInt(val, 10) >= 45, {
         message: "ওজন কমপক্ষে ৪৫ কেজি হতে হবে",
       }),
-       previousDonations: z
+    previousDonations: z
       .string()
       .optional()
       .refine(
@@ -119,14 +126,23 @@ const step2Fields: (keyof z.infer<typeof formSchema>)[] = [
   "bloodGroup",
   "age",
   "weight",
-   "previousDonations",
+  "previousDonations",
 ];
 
 const RegistrationPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+ 
+
+
+   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
+  // RTK Query থেকে mutation হুক ব্যবহার করুন
+  // এটি একটি trigger ফাংশন (registerDonor) এবং mutation-এর বিভিন্ন স্টেট (যেমন isLoading) রিটার্ন করে
+  const [registerDonor, { isLoading }] = useRegisterDonorMutation(); 
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -166,24 +182,44 @@ const RegistrationPage = () => {
     }
   };
 
+// onSubmit ফাংশনটি এভাবে পরিবর্তন করুন
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
+    const toastId = toast.loading("নিবন্ধন প্রক্রিয়া চলছে...");
 
-    // isAvailable ফিল্ড যুক্ত করা হচ্ছে
-    const submitData = {
-      ...data,
-      isAvailable: true,
-    };
+    try {
+      // 1. ব্যাকএন্ডে পাঠানোর জন্য ডেটা প্রস্তুত করুন
+      // - confirmPassword ফিল্ডটি বাদ দিন কারণ এটি ব্যাকএন্ডে দরকার নেই
+      // - age, weight, previousDonations কে number এ রূপান্তর করুন
+      const { confirmPassword, ...donorData } = data;
 
-    console.log("Form data from registration form:", submitData);
+      const submitData = {
+        ...donorData,
+        age: Number(donorData.age),
+        weight: Number(donorData.weight),
+        previousDonations: donorData.previousDonations
+          ? Number(donorData.previousDonations)
+          : 0,
+        isAvailable: true, // আপনার আগের লজিক অনুযায়ী
+      };
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect to success page or dashboard
-      // alert("নিবন্ধন সফল হয়েছে!");
-      // window.location.href = "/dashboard";
-    }, 3000);
+      // 2. API-তে ডেটা পাঠান
+      // .unwrap() ব্যবহার করলে 성공 বা ব্যর্থতার রেজাল্ট সরাসরি পাওয়া যায়
+      const res = await registerDonor(submitData).unwrap();
+      
+      // 3. সফল হলে Redux store এ user এবং token সেভ করুন
+      if (res?.data?.token) {
+        dispatch(setUser({ user: res.data.user, token: res.data.token }));
+        toast.success("নিবন্ধন সফল হয়েছে!", { id: toastId });
+        navigate("/dashboard"); // ব্যবহারকারীকে ড্যাশবোর্ড বা প্রোফাইল পেজে পাঠান
+      }
+
+    } catch (error: any) {
+      // 4. কোনো এরর হলে ব্যবহারকারীকে জানান
+      console.error(error);
+      const errorMessage = error?.data?.message || "নিবন্ধন ব্যর্থ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।";
+      toast.error(errorMessage, { id: toastId });
+    }
   };
 
   const renderStep1 = () => (
@@ -400,28 +436,24 @@ const RegistrationPage = () => {
         />
       </div>
 
-      <FormField 
-      control={form.control}
-      name="previousDonations"
-      render={({field})=>(
-  <FormItem>
-          <FormLabel> পূর্বে কতবার রক্তদান করেছেন (ঐচ্ছিক) </FormLabel>
+      <FormField
+        control={form.control}
+        name="previousDonations"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel> পূর্বে কতবার রক্তদান করেছেন (ঐচ্ছিক) </FormLabel>
             <FormControl>
               <Input
-              type="number"
-              placeholder="যেমন: 4"
-              min="0"
-              {...field}
-
-              className="h-12 border-red-200 focus:border-red-400"
+                type="number"
+                placeholder="যেমন: 4"
+                min="0"
+                {...field}
+                className="h-12 border-red-200 focus:border-red-400"
               />
             </FormControl>
-         
-        </FormItem>
-      )}
-      >
-      
-      </FormField>
+          </FormItem>
+        )}
+      ></FormField>
       <FormField
         control={form.control}
         name="lastDonation"

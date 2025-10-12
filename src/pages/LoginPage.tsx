@@ -1,59 +1,118 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type React from "react"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Heart,
+  Mail,
+  Lock,
+  Eye,
+  EyeOff,
+  ArrowLeft,
+  AlertCircle,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { useAppDispatch } from "@/redux/hook";
+import { useLoginMutation } from "@/redux/features/auth/authApi";
+import { setUser } from "@/redux/features/auth/authSlice";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Heart, Mail, Lock, Eye, EyeOff, ArrowLeft, AlertCircle } from "lucide-react"
 
-import { motion } from "framer-motion"
-import { Link } from "react-router-dom"
+// Zod validation schema
+const loginSchema = z.object({
+  email: z
+    .string()
+    .min(1, "ইমেইল আবশ্যক")
+    .email("সঠিক ইমেইল ঠিকানা দিন"),
+  password: z
+    .string()
+    .min(6, "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে"),
+  rememberMe: z.boolean().optional(),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
 const LoginPage = () => {
-	  const [showPassword, setShowPassword] = useState(false)
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
-  })
-  const [errors, setErrors] = useState<{ [key: string]: string }>({})
-  const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [login, { isLoading, isError, error }] = useLoginMutation();
+  const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string>("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
+  // React Hook Form setup
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
-    // Basic validation
-    const newErrors: { [key: string]: string } = {}
+  const rememberMe = watch("rememberMe");
 
-    if (!formData.email) {
-      newErrors.email = "ইমেইল আবশ্যক"
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "সঠিক ইমেইল ঠিকানা দিন"
+  // Handle form submission
+  const onSubmit = async (data: LoginFormData) => {
+    setApiError("");
+
+    try {
+      const result = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+
+      // Store user data in Redux
+      dispatch(
+        setUser({
+          user: result.data.user,
+          token: result.data.token,
+        })
+      );
+
+      // Store token in localStorage if remember me is checked
+      if (data.rememberMe) {
+        localStorage.setItem("token", result.data.token);
+      }
+
+      // Navigate to dashboard
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Login failed:", err);
     }
+  };
 
-    if (!formData.password) {
-      newErrors.password = "পাসওয়ার্ড আবশ্যক"
-    } else if (formData.password.length < 6) {
-      newErrors.password = "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে"
+  // Handle API error messages
+  useEffect(() => {
+    if (isError && error) {
+      const apiErr = error as any;
+      const errorMessage =
+        apiErr?.data?.message ||
+        apiErr?.message ||
+        "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
+      setApiError(errorMessage);
     }
-
-    setErrors(newErrors)
-
-    if (Object.keys(newErrors).length === 0) {
-      // Simulate API call
-      setTimeout(() => {
-        setIsLoading(false)
-        // Redirect to dashboard
-        window.location.href = "/dashboard"
-      }, 2000)
-    } else {
-      setIsLoading(false)
-    }
-  }
+  }, [isError, error]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-4">
@@ -64,7 +123,10 @@ const LoginPage = () => {
         className="w-full max-w-md"
       >
         {/* Back Button */}
-        <Link to="/" className="inline-flex items-center text-gray-600 hover:text-red-600 mb-6 transition-colors">
+        <Link
+          to="/"
+          className="inline-flex items-center text-gray-600 hover:text-red-600 mb-6 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4 mr-2" />
           হোমে ফিরে যান
         </Link>
@@ -77,14 +139,27 @@ const LoginPage = () => {
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
               স্বাগতম
             </CardTitle>
-            <CardDescription className="text-gray-600">আপনার অ্যাকাউন্টে লগইন করুন</CardDescription>
+            <CardDescription className="text-gray-600">
+              আপনার অ্যাকাউন্টে লগইন করুন
+            </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* API Error Message */}
+            {apiError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start gap-2">
+                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <p className="text-sm text-red-700">{apiError}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-medium text-gray-700"
+                >
                   ইমেইল ঠিকানা
                 </Label>
                 <div className="relative">
@@ -93,22 +168,27 @@ const LoginPage = () => {
                     id="email"
                     type="email"
                     placeholder="আপনার ইমেইল দিন"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className={`pl-10 h-12 border-red-200 focus:border-red-400 ${errors.email ? "border-red-500" : ""}`}
+                    {...register("email")}
+                    className={`pl-10 h-12 border-red-200 focus:border-red-400 ${
+                      errors.email ? "border-red-500" : ""
+                    }`}
+                    disabled={isLoading}
                   />
                 </div>
                 {errors.email && (
                   <div className="flex items-center gap-1 text-red-500 text-sm">
                     <AlertCircle className="w-4 h-4" />
-                    {errors.email}
+                    {errors.email.message}
                   </div>
                 )}
               </div>
 
               {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-700"
+                >
                   পাসওয়ার্ড
                 </Label>
                 <div className="relative">
@@ -117,22 +197,29 @@ const LoginPage = () => {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="আপনার পাসওয়ার্ড দিন"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className={`pl-10 pr-10 h-12 border-red-200 focus:border-red-400 ${errors.password ? "border-red-500" : ""}`}
+                    {...register("password")}
+                    className={`pl-10 pr-10 h-12 border-red-200 focus:border-red-400 ${
+                      errors.password ? "border-red-500" : ""
+                    }`}
+                    disabled={isLoading}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    disabled={isLoading}
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
                 {errors.password && (
                   <div className="flex items-center gap-1 text-red-500 text-sm">
                     <AlertCircle className="w-4 h-4" />
-                    {errors.password}
+                    {errors.password.message}
                   </div>
                 )}
               </div>
@@ -142,14 +229,20 @@ const LoginPage = () => {
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     id="remember"
-                    checked={formData.rememberMe}
-                    onCheckedChange={(checked) => setFormData({ ...formData, rememberMe: checked as boolean })}
+                    checked={rememberMe}
+                    onCheckedChange={(checked) =>
+                      setValue("rememberMe", checked as boolean)
+                    }
+                    disabled={isLoading}
                   />
                   <Label htmlFor="remember" className="text-sm text-gray-600">
                     আমাকে মনে রাখুন
                   </Label>
                 </div>
-                <Link to="/forgot-password" className="text-sm text-red-600 hover:text-red-700 hover:underline">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-red-600 hover:text-red-700 hover:underline"
+                >
                   পাসওয়ার্ড ভুলে গেছেন?
                 </Link>
               </div>
@@ -173,13 +266,14 @@ const LoginPage = () => {
 
             <Separator />
 
-         
-
             {/* Sign Up Link */}
             <div className="text-center">
               <p className="text-gray-600">
                 অ্যাকাউন্ট নেই?{" "}
-                <Link to="/register-page" className="text-red-600 hover:text-red-700 font-semibold hover:underline">
+                <Link
+                  to="/register-page"
+                  className="text-red-600 hover:text-red-700 font-semibold hover:underline"
+                >
                   নিবন্ধন করুন
                 </Link>
               </p>
@@ -203,7 +297,7 @@ const LoginPage = () => {
         </div>
       </motion.div>
     </div>
-  )
+  );
 };
 
 export default LoginPage;

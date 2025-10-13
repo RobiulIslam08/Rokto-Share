@@ -72,7 +72,22 @@ export  const UserDonorDashboardPage =  () => {
   const navItems = userRole === "user" ? userNavItems : donorNavItems
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50/20 to-orange-50/30">
+    <>
+      <title>
+        {userRole === "donor" ? "Donor Dashboard" : "My Dashboard"} | RoktoShare
+      </title>
+      <meta
+        name="description"
+        content="আপনার RoktoShare প্রোফাইল, রক্তের অনুরোধ, এবং দানের ইতিহাস পরিচালনা করুন। জীবন বাঁচানোর জন্য আপনার ব্যক্তিগত ড্যাশবোর্ড।"
+      />
+      
+      {/* গুরুত্বপূর্ণ: এই ট্যাগটি সার্চ ইঞ্জিনকে এই ব্যক্তিগত পেজটি ইনডেক্স করা থেকে বিরত রাখে। 
+        ব্যবহারকারীর ড্যাশবোর্ড পাবলিক সার্চ রেজাল্টে আসা উচিত নয়।
+      */}
+      <meta name="robots" content="noindex, nofollow, noarchive" />
+
+
+         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-red-50/20 to-orange-50/30">
       {/* Header */}
       <header className="sticky top-0 z-50 glass-effect border-b border-white/20 shadow-lg">
         <div className="flex h-16 md:h-20 items-center px-4 md:px-8">
@@ -279,6 +294,8 @@ export  const UserDonorDashboardPage =  () => {
         </main>
       </div>
     </div>
+    </>
+ 
   )
 }
 

@@ -151,8 +151,12 @@ const FindBloodDonnerPage = () => {
     setSearchQuery("");
   };
   return (
-    <>  <title>Find Blood Donors | RoktoShare</title>
+    <>  <title>রক্ত দাতা খুজুন | RoktoShare</title>
       <meta name="description" content="আপনার এলাকার রক্তদাতাদের খুঁজুন।" />
+       <meta
+        name="keywords"
+        content="RoktoShare, blood connect, রক্ত সৈনিক, find blood donator, blood donation management,রক্তদান, ব্লাড ব্যাংক, বাংলাদেশের রক্তদান সংস্থা, জীবন বাঁচানো"
+      />
       <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
         {/* Header */}
         <DonnerFinderHeader

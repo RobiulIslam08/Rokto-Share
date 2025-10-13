@@ -211,7 +211,7 @@ const RegistrationPage = () => {
       if (res?.data?.accessToken) {
         dispatch(setUser({ user: res.data.user, token: res.data.accessToken }));
         toast.success("নিবন্ধন সফল হয়েছে!", { id: toastId });
-        navigate("/dashboard"); // ব্যবহারকারীকে ড্যাশবোর্ড বা প্রোফাইল পেজে পাঠান
+        navigate("/dashboard/user"); // ব্যবহারকারীকে ড্যাশবোর্ড বা প্রোফাইল পেজে পাঠান
       }
 
     } catch (error: any) {

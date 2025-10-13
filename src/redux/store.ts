@@ -16,9 +16,11 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'auth',
   storage,
+   whitelist: ['token', 'user'], // শুধুমাত্র এই fields persist করবে
 };
 
 const persistedAuthReducer = persistReducer(persistConfig, authReducer);
+
 
 export const store = configureStore({
   reducer: {

@@ -31,7 +31,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch } from "@/redux/hook";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { setUser } from "@/redux/features/auth/authSlice";
-
+import { toast } from "sonner";
 
 // Zod validation schema
 const loginSchema = z.object({
@@ -82,7 +82,7 @@ const LoginPage = () => {
         password: data.password,
       }).unwrap();
 
-      // Store user data in Redux
+      // ✅ Store user data in Redux (Redux Persist automatically save করবে)
       dispatch(
         setUser({
           user: result.data.user,
@@ -90,15 +90,21 @@ const LoginPage = () => {
         })
       );
 
-      // Store token in localStorage if remember me is checked
-      if (data.rememberMe) {
-        localStorage.setItem("token", result.data.accessToken);
-      }
+      // ❌ localStorage.setItem সরিয়ে দিন - Redux Persist handle করবে
+      // Remember Me feature এখন Redux Persist দ্বারা automatically handled হচ্ছে
 
+      toast.success("সফলভাবে লগইন হয়েছে!");
+      
       // Navigate to dashboard
-      navigate("/dashboard");
-    } catch (err) {
+      navigate("/dashboard/user");
+    } catch (err: any) {
       console.error("Login failed:", err);
+      const errorMessage =
+        err?.data?.message ||
+        err?.message ||
+        "লগইন ব্যর্থ হয়েছে। আবার চেষ্টা করুন।";
+      setApiError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 

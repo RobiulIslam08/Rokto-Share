@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Heart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button"; // shadcn/ui Button কম্পোনেন্ট
 import { cn } from "@/lib/utils"; // cn ইউটিলিটি ফাংশন
+import { useAppDispatch, useAppSelector } from "@/redux/hook";
+import { logout } from "@/redux/features/auth/authSlice";
 
 const Navbar = () => {
   // ডেস্কটপ নেভিগেশন লিঙ্কের জন্য স্টাইল
   const baseNavStyles =
     "relative text-slate-700 hover:text-red-600 transition-all duration-300 font-medium group px-4 py-2 rounded-lg";
   const activeNavStyles = "text-red-600 bg-red-100/70";
-
   // মোবাইল নেভিগেশন লিঙ্কের জন্য স্টাইল
   const baseMobileNavStyles =
     "text-slate-700 hover:text-red-600 transition-all duration-300 font-medium px-6 py-3 rounded-lg border-l-2 border-transparent hover:border-red-500 hover:bg-red-50/50 hover:translate-x-1";
@@ -20,6 +21,14 @@ const Navbar = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
+  // Redux থেকে state এবং dispatch অ্যাক্সেস করার জন্য আপনার কাস্টম হুক ব্যবহার
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const {token} = useAppSelector((state) => state.auth)
+   const handleLogout = () => {
+    dispatch(logout());
+    navigate("/"); // লগআউটের পর হোমপেজে রিডাইরেক্ট
+  };
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
@@ -36,7 +45,7 @@ const Navbar = () => {
     { href: "/contact-page", label: "যোগাযোগ" },
     // { href: "/dashboard-page", label: "User Donor Dashboard" },
     // { href: "/admin-dashboard-page", label: "Admin Dashboard" },
-       { href: "/dashboard/user", label: "ড্যাশবোর্ড" },
+    { href: "/dashboard/user", label: "ড্যাশবোর্ড" },
   ];
 
   return (
@@ -88,7 +97,18 @@ const Navbar = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden lg:flex items-center space-x-4">
-            <Link to="/login-page">
+            {
+              token? (
+              <Button
+                onClick={handleLogout}
+                variant="outline"
+                className="cursor-pointer border-red-500 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105"
+              >
+                লগআউট
+              </Button>
+            ):
+            <>
+ <Link to="/login-page">
               <Button
                 variant="outline"
                 className="cursor-pointer border-red-500 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105"
@@ -107,6 +127,9 @@ const Navbar = () => {
                 নিবন্ধন করুন
               </Button>
             </Link>
+            </>
+            }
+           
           </div>
 
           {/* Mobile Menu Button */}

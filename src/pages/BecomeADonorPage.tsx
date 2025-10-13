@@ -1,5 +1,3 @@
-
-
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -10,20 +8,20 @@ import { Sidebar } from "@/components/becomeADonorPage/Sidebar";
 
 // Form Data Type (DonorForm থেকে import করতে পারেন)
 type DonorFormData = {
-    name: string;
-    email: string;
-    phone: string;
-    password: string;
-    confirmPassword: string; 
-    bloodGroup: string;
-    age: number; 
-    weight: number; 
-    division: string;
-    district: string;
-    upazila: string;
-    isAvailable: boolean;
-    lastDonation?: string;
-    medicalHistory?: string;
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  confirmPassword: string;
+  bloodGroup: string;
+  age: number;
+  weight: number;
+  division: string;
+  district: string;
+  upazila: string;
+  isAvailable: boolean;
+  lastDonation?: string;
+  medicalHistory?: string;
 };
 
 const BecomeADonorPage = () => {
@@ -34,25 +32,24 @@ const BecomeADonorPage = () => {
     try {
       // API call করুন এখানে
       console.log("Form Data:", data);
-      
+
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      
+
       // আপনার API call
       // const response = await fetch('/api/donors', {
       //   method: 'POST',
       //   headers: { 'Content-Type': 'application/json' },
       //   body: JSON.stringify(data),
       // });
-      
+
       // if (!response.ok) throw new Error('Failed to register');
-      
+
       // Success এর পরে
       setShowSuccess(true);
-      
+
       // Optional: Toast notification
       // toast.success("রক্তদাতা হিসেবে নিবন্ধন সফল হয়েছে!");
-      
     } catch (error) {
       console.error("Registration error:", error);
       // Error handling
@@ -65,23 +62,35 @@ const BecomeADonorPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
-      <PageHeader />
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <DonorForm onSubmit={handleFormSubmit} />
-            </motion.div>
+    <>
+      <title>রক্তদাতা হোন এবং জীবন বাঁচান | RoktoShare নিবন্ধন</title>
+      <meta
+        name="description"
+        content="RoktoShare প্ল্যাটফর্মে একজন গর্বিত রক্তদাতা হিসেবে নিবন্ধন করুন। আপনার এক ব্যাগ রক্ত পারে একটি জীবন বাঁচাতে। আমাদের সহজ নিবন্ধন ফর্ম পূরণ করে আপনিও হতে পারেন একজন জীবন রক্ষাকারী।"
+      />
+      <meta
+        name="keywords"
+        content="রক্তদাতা নিবন্ধন, become a blood donor, রক্তদান ফর্ম, RoktoShare, জীবন বাঁচানো, blood donation Bangladesh, অনলাইন রক্তদাতা"
+      />
+
+      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
+        <PageHeader />
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <DonorForm onSubmit={handleFormSubmit} />
+              </motion.div>
+            </div>
+            <Sidebar />
           </div>
-          <Sidebar />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

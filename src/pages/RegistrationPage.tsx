@@ -208,8 +208,8 @@ const RegistrationPage = () => {
       const res = await registerDonor(submitData).unwrap();
       
       // 3. সফল হলে Redux store এ user এবং token সেভ করুন
-      if (res?.data?.token) {
-        dispatch(setUser({ user: res.data.user, token: res.data.token }));
+      if (res?.data?.accessToken) {
+        dispatch(setUser({ user: res.data.user, token: res.data.accessToken }));
         toast.success("নিবন্ধন সফল হয়েছে!", { id: toastId });
         navigate("/dashboard"); // ব্যবহারকারীকে ড্যাশবোর্ড বা প্রোফাইল পেজে পাঠান
       }

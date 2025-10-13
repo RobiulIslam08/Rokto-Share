@@ -173,6 +173,20 @@ const Navbar = () => {
 
             {/* Mobile Auth Buttons */}
             <div className="flex flex-col space-y-3 px-6 pt-4 mt-2 border-t border-red-100">
+
+              {
+                token?<Button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  variant="outline"
+                  className="w-full border-red-500 text-red-600 hover:bg-red-500 hover:text-white"
+                >
+                  লগআউট
+                </Button>
+                :
+                  <>
               <Link to="/login-page" onClick={() => setIsOpen(false)}>
                 <Button
                   variant="outline"
@@ -186,6 +200,9 @@ const Navbar = () => {
                   নিবন্ধন করুন
                 </Button>
               </Link>
+             </>
+              }
+           
             </div>
           </nav>
         </div>

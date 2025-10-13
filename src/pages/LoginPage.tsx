@@ -86,13 +86,13 @@ const LoginPage = () => {
       dispatch(
         setUser({
           user: result.data.user,
-          token: result.data.token,
+          token: result.data.accessToken,
         })
       );
 
       // Store token in localStorage if remember me is checked
       if (data.rememberMe) {
-        localStorage.setItem("token", result.data.token);
+        localStorage.setItem("token", result.data.accessToken);
       }
 
       // Navigate to dashboard

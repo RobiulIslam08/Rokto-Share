@@ -1,12 +1,8 @@
-
 import { useState, useEffect } from "react";
-
 
 import { DonnerFinderHeader } from "@/components/findBloodDonnerPage/DonnerFinderHeader";
 import { FilterSidebar } from "@/components/findBloodDonnerPage/FilterSidebar";
 import { DonnerList } from "@/components/findBloodDonnerPage/DonnerList";
-
-
 
 // Mock donor data
 const mockDonors = [
@@ -145,7 +141,7 @@ const FindBloodDonnerPage = () => {
     setFilteredDonors(filtered);
   }, [filters, searchQuery]);
 
- const resetFilters = () => {
+  const resetFilters = () => {
     setFilters({
       bloodGroup: "all",
       division: "all",
@@ -155,26 +151,33 @@ const FindBloodDonnerPage = () => {
     setSearchQuery("");
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
-      {/* Header */}
-      <DonnerFinderHeader donorCount={filteredDonors.length}
-        onToggleFilters={() => setShowFilters(!showFilters)}></DonnerFinderHeader>
+    <>  <title>Find Blood Donors | RoktoShare</title>
+      <meta name="description" content="আপনার এলাকার রক্তদাতাদের খুঁজুন।" />
+      <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50">
+        {/* Header */}
+        <DonnerFinderHeader
+          donorCount={filteredDonors.length}
+          onToggleFilters={() => setShowFilters(!showFilters)}
+        ></DonnerFinderHeader>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Filters Sidebar */}
-        <FilterSidebar  filters={filters}
-            setFilters={setFilters}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            resetFilters={resetFilters}
-            isVisible={showFilters}/>
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Filters Sidebar */}
+            <FilterSidebar
+              filters={filters}
+              setFilters={setFilters}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+              resetFilters={resetFilters}
+              isVisible={showFilters}
+            />
 
-          {/* Donors List */}
-          <DonnerList donors={filteredDonors}/>
+            {/* Donors List */}
+            <DonnerList donors={filteredDonors} />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

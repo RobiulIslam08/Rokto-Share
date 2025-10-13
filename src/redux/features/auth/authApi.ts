@@ -16,7 +16,19 @@ const authApi = baseApi.injectEndpoints({
         body: donorInfo,
       }),
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: '/auth/logout',
+        method: 'POST',
+      }),
+    }),
+    refreshToken: builder.mutation({
+      query: () => ({
+        url: '/auth/refresh-token',
+        method: 'POST',
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterDonorMutation } = authApi;
+export const { useLoginMutation, useRegisterDonorMutation,useLogoutMutation,useRefreshTokenMutation } = authApi;

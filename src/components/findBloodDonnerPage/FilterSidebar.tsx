@@ -9,9 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { bloodGroups, districts, divisions } from "@/lib/locationData";
+import { bloodGroups, districts, divisions, upazilas } from "@/lib/locationData";
 import { Search, Filter } from "lucide-react";
- // Data আলাদা ফাইল থেকে আসবে
 
 type FilterSidebarProps = {
   filters: any;
@@ -42,8 +41,10 @@ export const FilterSidebar = ({
         <CardContent className="space-y-6">
           {/* Search */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">নাম দিয়ে খুঁজুন</label>
-            <div className="relative">
+            <label className="text-sm font-medium">
+              নাম/ইমেইল/ফোন দিয়ে খুঁজুন
+            </label>
+            <div className="relative cursor-pointer">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
               <Input
                 placeholder="রক্তদাতার নাম লিখুন"
@@ -63,7 +64,7 @@ export const FilterSidebar = ({
                 setFilters({ ...filters, bloodGroup: value })
               }
             >
-              <SelectTrigger className="border-red-200 focus:border-red-400 w-full">
+              <SelectTrigger className="border-red-200 focus:border-red-400 w-full cursor-pointer">
                 <SelectValue placeholder="সব গ্রুপ" />
               </SelectTrigger>
               <SelectContent>
@@ -83,10 +84,15 @@ export const FilterSidebar = ({
             <Select
               value={filters.division}
               onValueChange={(value) =>
-                setFilters({ ...filters, division: value, district: "all" })
+                setFilters({ 
+                  ...filters, 
+                  division: value, 
+                  district: "all",
+                  upazila: "all" 
+                })
               }
             >
-              <SelectTrigger className="border-red-200 focus:border-red-400 w-full">
+              <SelectTrigger className="border-red-200 focus:border-red-400 w-full cursor-pointer">
                 <SelectValue placeholder="সব বিভাগ" />
               </SelectTrigger>
               <SelectContent>
@@ -107,47 +113,56 @@ export const FilterSidebar = ({
               <Select
                 value={filters.district}
                 onValueChange={(value) =>
-                  setFilters({ ...filters, district: value })
+                  setFilters({ 
+                    ...filters, 
+                    district: value,
+                    upazila: "all" 
+                  })
                 }
               >
-                <SelectTrigger className="border-red-200 focus:border-red-400 w-full">
+                <SelectTrigger className="border-red-200 focus:border-red-400 w-full cursor-pointer">
                   <SelectValue placeholder="সব জেলা" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">সব জেলা</SelectItem>
-                  {districts[
-                    filters.division as keyof typeof districts
-                  ]?.map((district) => (
-                    <SelectItem key={district} value={district}>
-                      {district}
-                    </SelectItem>
-                  ))}
+                  {districts[filters.division as keyof typeof districts]?.map(
+                    (district) => (
+                      <SelectItem key={district} value={district}>
+                        {district}
+                      </SelectItem>
+                    )
+                  )}
                 </SelectContent>
               </Select>
             </div>
           )}
 
-          {/* Availability */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">প্রাপ্যতা</label>
-            <Select
-              value={filters.availability}
-              onValueChange={(value) =>
-                setFilters({ ...filters, availability: value })
-              }
-            >
-              <SelectTrigger className="border-red-200 focus:border-red-400 w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">সব রক্তদাতা</SelectItem>
-                <SelectItem value="available">এখন রক্ত দিতে পারবেন</SelectItem>
-                <SelectItem value="unavailable">
-                  এখন রক্ত দিতে পারবেন না
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {/* Upazila */}
+          {filters.district !== "all" && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium">উপজেলা</label>
+              <Select
+                value={filters.upazila}
+                onValueChange={(value) =>
+                  setFilters({ ...filters, upazila: value })
+                }
+              >
+                <SelectTrigger className="border-red-200 focus:border-red-400 w-full cursor-pointer">
+                  <SelectValue placeholder="সব উপজেলা" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">সব উপজেলা</SelectItem>
+                  {upazilas[filters.district as keyof typeof upazilas]?.map(
+                    (upazila) => (
+                      <SelectItem key={upazila} value={upazila}>
+                        {upazila}
+                      </SelectItem>
+                    )
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <Button
             variant="outline"

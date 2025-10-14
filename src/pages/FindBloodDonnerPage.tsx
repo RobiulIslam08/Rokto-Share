@@ -10,6 +10,7 @@ const FindBloodDonnerPage = () => {
     bloodGroup: "all",
     division: "all",
     district: "all",
+    upazila: "all",
     availability: "all",
   });
 
@@ -22,6 +23,7 @@ const FindBloodDonnerPage = () => {
     bloodGroup: filters.bloodGroup,
     division: filters.division,
     district: filters.district,
+    upazila: filters.upazila,
     availability: filters.availability,
     searchTerm: searchQuery,
     page: page,
@@ -33,6 +35,7 @@ const FindBloodDonnerPage = () => {
       bloodGroup: "all",
       division: "all",
       district: "all",
+      upazila: "all",
       availability: "all",
     });
     setSearchQuery("");

@@ -1,4 +1,3 @@
-// src/redux/features/donor/donorApi.ts
 import { baseApi } from '../../api/baseApi';
 
 export const donorApi = baseApi.injectEndpoints({
@@ -16,6 +15,9 @@ export const donorApi = baseApi.injectEndpoints({
         }
         if (params?.district && params.district !== 'all') {
           queryParams.append('district', params.district);
+        }
+        if (params?.upazila && params.upazila !== 'all') {
+          queryParams.append('upazila', params.upazila);
         }
         if (params?.availability && params.availability !== 'all') {
           queryParams.append('availability', params.availability);

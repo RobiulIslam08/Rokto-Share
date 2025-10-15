@@ -17,6 +17,8 @@ import {
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
+import { useState } from "react";
+import BloodRequestForm from "./BloodRequestForm";
 
 type DonnerCardProps = {
   donor: any;
@@ -53,6 +55,7 @@ const getAvailabilityStatus = (donor: any) => {
 };
 
 export const DonnerCard = ({ donor, index }: DonnerCardProps) => {
+   const [isRequestFormOpen, setIsRequestFormOpen] = useState(false);
   const status = getAvailabilityStatus(donor);
   const StatusIcon = status.icon;
 
@@ -156,6 +159,7 @@ export const DonnerCard = ({ donor, index }: DonnerCardProps) => {
                 size="sm"
                 className="bg-red-600 hover:bg-red-700  w-full md:w-auto cursor-pointer"
                 disabled={!donor.isAvailable}
+                onClick={()=> setIsRequestFormOpen(true)}
               >
                 অনুরোধ পাঠান
               </Button>
@@ -163,6 +167,7 @@ export const DonnerCard = ({ donor, index }: DonnerCardProps) => {
           </div>
         </CardContent>
       </Card>
+      <BloodRequestForm donor={donor} isOpen={isRequestFormOpen} onClose={() => setIsRequestFormOpen(false)}/>
     </motion.div>
   );
 };

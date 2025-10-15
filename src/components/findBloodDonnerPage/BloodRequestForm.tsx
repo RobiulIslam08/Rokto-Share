@@ -42,13 +42,15 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
 	const [createRequest,{isLoading}] = useCreateBloodRequestMutation()
 	const onSubmit = async(data:BloodRequestFormData) => {
 		try {
+			console.log('data from request form', data, donor)
 			await createRequest({
 				donorId:donor.id,
 				...data
 
 			}).unwrap()
 			reset();
-			onClose()
+			onClose();
+			toast.success('রক্তের অনুরোধ সফলভাবে পাঠানো হয়েছে!');
 		} catch (error) {
 			toast.error('অনুরোধ পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
 			 console.error('Request error:', error);
@@ -56,7 +58,7 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
 	}
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="h-full overflow-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-red-600">
             রক্তের অনুরোধ পাঠান

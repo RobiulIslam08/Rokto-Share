@@ -6,8 +6,7 @@ import UserManagementSection from "@/components/dashboard/Admin/UserManagementSe
 import BloodRequestsSection from "@/components/dashboard/Donor/BloodRequestsSection";
 import DonationHistorySection from "@/components/dashboard/Donor/DonationHistorySection";
 import DonorOverviewSection from "@/components/dashboard/Donor/DonorOverviewSection";
-import DonorScheduleSection from "@/components/dashboard/Donor/DonorScheduleSection";
-import RequestBloodSection from "@/components/dashboard/User/RequestBloodSection";
+
 import RequestHistorySection from "@/components/dashboard/User/RequestHistorySection";
 import UserOverviewSection from "@/components/dashboard/User/UserOverviewSection";
 import MessagesSection from "@/components/dashboard/common/MessagesSection";
@@ -105,7 +104,7 @@ export const router = createBrowserRouter([
           { index: true, element: <DonorOverviewSection /> }, // /dashboard/donor এর জন্য ডিফল্ট
           { path: "donation-history", element: <DonationHistorySection /> },
           { path: "blood-requests", element: <BloodRequestsSection /> },
-          { path: "my-schedule", element: <DonorScheduleSection /> },
+    
         ],
       },
 
@@ -115,7 +114,7 @@ export const router = createBrowserRouter([
         children: [
           { index: true, element: <UserOverviewSection /> }, // /dashboard/user এর জন্য ডিফল্ট
           { path: "my-requests", element: <RequestHistorySection /> },
-          { path: "request-blood", element: <RequestBloodSection /> },
+        
         ],
       },
     ],

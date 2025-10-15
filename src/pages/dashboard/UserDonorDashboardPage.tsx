@@ -11,7 +11,7 @@ import {
   Bell,
   User,
 
-  Calendar,
+
 
   AlertCircle,
   Droplets,
@@ -27,7 +27,6 @@ import {
   X,
 } from "lucide-react"
 import UserOverviewSection from "@/components/dashboard/User/UserOverviewSection"
-import RequestBloodSection from "@/components/dashboard/User/RequestBloodSection"
 import RequestHistorySection from "@/components/dashboard/User/RequestHistorySection"
 import FindDonorsSection from "@/components/dashboard/User/FindDonorsSection"
 import ProfileSection from "@/components/dashboard/common/ProfileSection"
@@ -37,7 +36,7 @@ import MessagesSection from "@/components/dashboard/common/MessagesSection"
 import DonorOverviewSection from "@/components/dashboard/Donor/DonorOverviewSection"
 import BloodRequestsSection from "@/components/dashboard/Donor/BloodRequestsSection"
 import DonationHistorySection from "@/components/dashboard/Donor/DonationHistorySection"
-import DonorScheduleSection from "@/components/dashboard/Donor/DonorScheduleSection"
+
 
 
 
@@ -53,7 +52,7 @@ export  const UserDonorDashboardPage =  () => {
 
   const userNavItems = [
     { id: "overview", label: "Dashboard", icon: Activity, color: "text-blue-600" },
-    { id: "request", label: "Request Blood", icon: Heart, color: "text-red-600" },
+   
     { id: "history", label: "My Requests", icon: History, color: "text-green-600" },
     { id: "donors", label: "Find Donors", icon: Search, color: "text-purple-600" },
     { id: "messages", label: "Messages", icon: MessageSquare, color: "text-orange-600" },
@@ -64,7 +63,6 @@ export  const UserDonorDashboardPage =  () => {
     { id: "overview", label: "Dashboard", icon: Activity, color: "text-blue-600" },
     { id: "requests", label: "Blood Requests", icon: Heart, color: "text-red-600" },
     { id: "history", label: "Donation History", icon: History, color: "text-green-600" },
-    { id: "schedule", label: "My Schedule", icon: Calendar, color: "text-purple-600" },
     { id: "messages", label: "Messages", icon: MessageSquare, color: "text-orange-600" },
     { id: "profile", label: "My Profile", icon: User, color: "text-gray-600" },
   ]
@@ -283,11 +281,10 @@ export  const UserDonorDashboardPage =  () => {
         <main className="flex-1 p-4 md:p-8 overflow-y-auto">
           <div className="animate-fade-in">
             {activeTab === "overview" && (userRole === "user" ? <UserOverviewSection /> : <DonorOverviewSection />)}
-            {activeTab === "request" && userRole === "user" && <RequestBloodSection />}
+          
             {activeTab === "requests" && userRole === "donor" && <BloodRequestsSection />}
             {activeTab === "history" && (userRole === "user" ? <RequestHistorySection /> : <DonationHistorySection />)}
             {activeTab === "donors" && userRole === "user" && <FindDonorsSection />}
-            {activeTab === "schedule" && userRole === "donor" && <DonorScheduleSection />}
             {activeTab === "messages" && <MessagesSection userRole={userRole} />}
             {activeTab === "profile" && <ProfileSection userRole={userRole} />}
           </div>

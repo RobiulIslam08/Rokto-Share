@@ -154,7 +154,7 @@ export const DonnerCard = ({ donor, index }: DonnerCardProps) => {
               </div>
               <Button
                 size="sm"
-                className="bg-red-600 hover:bg-red-700  w-full md:w-auto "
+                className="bg-red-600 hover:bg-red-700  w-full md:w-auto cursor-pointer"
                 disabled={!donor.isAvailable}
               >
                 অনুরোধ পাঠান

@@ -5,7 +5,7 @@
 import { cn } from "@/lib/utils";
 import { NavLink } from "react-router-dom";
 import {
-  Activity, Users, Droplets, Heart,  Settings, History, Calendar, Plus,  User as UserIcon,
+  Activity, Users, Droplets, Heart,  Settings, History,   User as UserIcon,
   Shield,
   Award,
   AlertCircle,
@@ -20,14 +20,14 @@ type UserRole = 'user' | 'donor' | 'admin';
 const navItemsData: Record<UserRole, NavItem[]> = {
     user: [
         { id: "overview", label: "Dashboard", icon: Activity, color: "text-blue-600", href: "/dashboard/user" },
-        { id: "request", label: "Request Blood", icon: Plus, color: "text-red-600", href: "/dashboard/user/request-blood" },
+       
         { id: "history", label: "My Requests", icon: History, color: "text-green-600", href: "/dashboard/user/my-requests" },
     ],
     donor: [
         { id: "overview", label: "Dashboard", icon: Activity, color: "text-blue-600", href: "/dashboard/donor" },
         { id: "requests", label: "Blood Requests", icon: Heart, color: "text-red-600", href: "/dashboard/donor/blood-requests" },
         { id: "history", label: "Donation History", icon: History, color: "text-green-600", href: "/dashboard/donor/donation-history" },
-        { id: "schedule", label: "My Schedule", icon: Calendar, color: "text-purple-600", href: "/dashboard/donor/my-schedule" },
+       
     ],
     admin: [
         { id: "overview", label: "Dashboard", icon: Activity, color: "text-blue-600", href: "/dashboard/admin" },

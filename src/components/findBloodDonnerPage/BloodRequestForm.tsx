@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
@@ -6,10 +7,9 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  
 } from "@/components/ui/dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -17,12 +17,14 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useCreateBloodRequestMutation } from "@/redux/features/bloodRequest/requestApi";
 import { Textarea } from "../ui/textarea";
+
 interface BloodRequestFormProps {
   donor: any;
   isOpen: boolean;
   onClose: () => void;
 }
 
+// This interface expects numbers, but the form will initially provide strings for number inputs.
 interface BloodRequestFormData {
   patientName: string;
   patientAge: number;
@@ -37,25 +39,43 @@ interface BloodRequestFormData {
   additionalNotes?: string;
 }
 
-const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
-	const {register, handleSubmit, formState:{errors}, reset} = useForm<BloodRequestFormData>()
-	const [createRequest,{isLoading}] = useCreateBloodRequestMutation()
-	const onSubmit = async(data:BloodRequestFormData) => {
-		try {
-			console.log('data from request form', data, donor)
-			await createRequest({
-				donorId:donor.id,
-				...data
+const BloodRequestForm = ({
+  donor,
+  isOpen,
+  onClose,
+}: BloodRequestFormProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<BloodRequestFormData>();
+  const [createRequest, { isLoading }] = useCreateBloodRequestMutation();
 
-			}).unwrap()
-			reset();
-			onClose();
-			toast.success('রক্তের অনুরোধ সফলভাবে পাঠানো হয়েছে!');
-		} catch (error) {
-			toast.error('অনুরোধ পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
-			 console.error('Request error:', error);
-		}
-	}
+  // The 'data' from react-hook-form will have strings for number inputs.
+  const onSubmit = async (data: any) => {
+    try {
+      // Create a payload with corrected data types
+      const payload = {
+        ...data,
+        patientAge: parseInt(data.patientAge, 10), // <-- SOLUTION: Convert string to number
+        unitsNeeded: parseInt(data.unitsNeeded, 10), // <-- SOLUTION: Convert string to number
+      };
+
+      await createRequest({
+        donorId: donor.id,
+        ...payload, // Send the corrected payload
+      }).unwrap();
+
+      reset();
+      onClose();
+      toast.success("রক্তের অনুরোধ সফলভাবে পাঠানো হয়েছে!");
+    } catch (error) {
+      toast.error("অনুরোধ পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+      console.error("Request error:", error);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="h-full overflow-auto">
@@ -68,7 +88,7 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
           </DialogDescription>
         </DialogHeader>
 
-	 {/* Donor Info */}
+        {/* Donor Info */}
         <div className="bg-red-50 p-4 rounded-lg mb-4">
           <div className="flex items-center gap-3">
             <Avatar className="w-12 h-12">
@@ -87,7 +107,7 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
             </Badge>
           </div>
         </div>
-		{/* Form Fields */}
+        {/* Form Fields */}
         <div className="space-y-4">
           {/* Patient Name & Age */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -95,11 +115,13 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
               <Label htmlFor="patientName">রোগীর নাম *</Label>
               <Input
                 id="patientName"
-                {...register('patientName', { required: 'রোগীর নাম আবশ্যক' })}
+                {...register("patientName", { required: "রোগীর নাম আবশ্যক" })}
                 placeholder="রোগীর পূর্ণ নাম লিখুন"
               />
               {errors.patientName && (
-                <p className="text-red-500 text-sm">{errors.patientName.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.patientName.message}
+                </p>
               )}
             </div>
 
@@ -108,15 +130,17 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
               <Input
                 id="patientAge"
                 type="number"
-                {...register('patientAge', { 
-                  required: 'বয়স আবশ্যক',
-                  min: { value: 1, message: 'সঠিক বয়স দিন' },
-                  max: { value: 120, message: 'সঠিক বয়স দিন' }
+                {...register("patientAge", {
+                  required: "বয়স আবশ্যক",
+                  min: { value: 1, message: "সঠিক বয়স দিন" },
+                  max: { value: 120, message: "সঠিক বয়স দিন" },
                 })}
                 placeholder="বয়স"
               />
               {errors.patientAge && (
-                <p className="text-red-500 text-sm">{errors.patientAge.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.patientAge.message}
+                </p>
               )}
             </div>
           </div>
@@ -126,7 +150,7 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
             <Label htmlFor="hospital">হাসপাতালের নাম *</Label>
             <Input
               id="hospital"
-              {...register('hospital', { required: 'হাসপাতালের নাম আবশ্যক' })}
+              {...register("hospital", { required: "হাসপাতালের নাম আবশ্যক" })}
               placeholder="যে হাসপাতালে রক্ত লাগবে"
             />
             {errors.hospital && (
@@ -139,12 +163,14 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
             <Label htmlFor="hospitalAddress">হাসপাতালের ঠিকানা *</Label>
             <Textarea
               id="hospitalAddress"
-              {...register('hospitalAddress', { required: 'ঠিকানা আবশ্যক' })}
+              {...register("hospitalAddress", { required: "ঠিকানা আবশ্যক" })}
               placeholder="হাসপাতালের সম্পূর্ণ ঠিকানা"
               rows={2}
             />
             {errors.hospitalAddress && (
-              <p className="text-red-500 text-sm">{errors.hospitalAddress.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.hospitalAddress.message}
+              </p>
             )}
           </div>
 
@@ -155,15 +181,17 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
               <Input
                 id="unitsNeeded"
                 type="number"
-                {...register('unitsNeeded', { 
-                  required: 'রক্তের পরিমাণ আবশ্যক',
-                  min: { value: 1, message: 'কমপক্ষে ১ ব্যাগ' },
-                  max: { value: 10, message: 'সর্বোচ্চ ১০ ব্যাগ' }
+                {...register("unitsNeeded", {
+                  required: "রক্তের পরিমাণ আবশ্যক",
+                  min: { value: 1, message: "কমপক্ষে ১ ব্যাগ" },
+                  max: { value: 10, message: "সর্বোচ্চ ১০ ব্যাগ" },
                 })}
                 placeholder="কত ব্যাগ রক্ত লাগবে"
               />
               {errors.unitsNeeded && (
-                <p className="text-red-500 text-sm">{errors.unitsNeeded.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.unitsNeeded.message}
+                </p>
               )}
             </div>
 
@@ -171,7 +199,9 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
               <Label htmlFor="urgency">জরুরী মাত্রা *</Label>
               <select
                 id="urgency"
-                {...register('urgency', { required: 'জরুরী মাত্রা নির্বাচন করুন' })}
+                {...register("urgency", {
+                  required: "জরুরী মাত্রা নির্বাচন করুন",
+                })}
                 className="w-full p-2 border rounded-lg"
               >
                 <option value="">নির্বাচন করুন</option>
@@ -192,18 +222,23 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
               <Input
                 id="neededDate"
                 type="date"
-                {...register('neededDate', { 
-                  required: 'তারিখ আবশ্যক',
+                {...register("neededDate", {
+                  required: "তারিখ আবশ্যক",
                   validate: (value) => {
                     const selectedDate = new Date(value);
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
-                    return selectedDate >= today || 'অতীতের তারিখ নির্বাচন করা যাবে না';
-                  }
+                    return (
+                      selectedDate >= today ||
+                      "অতীতের তারিখ নির্বাচন করা যাবে না"
+                    );
+                  },
                 })}
               />
               {errors.neededDate && (
-                <p className="text-red-500 text-sm">{errors.neededDate.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.neededDate.message}
+                </p>
               )}
             </div>
 
@@ -212,10 +247,12 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
               <Input
                 id="neededTime"
                 type="time"
-                {...register('neededTime', { required: 'সময় আবশ্যক' })}
+                {...register("neededTime", { required: "সময় আবশ্যক" })}
               />
               {errors.neededTime && (
-                <p className="text-red-500 text-sm">{errors.neededTime.message}</p>
+                <p className="text-red-500 text-sm">
+                  {errors.neededTime.message}
+                </p>
               )}
             </div>
           </div>
@@ -225,17 +262,19 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
             <Label htmlFor="contactPhone">যোগাযোগের ফোন নম্বর *</Label>
             <Input
               id="contactPhone"
-              {...register('contactPhone', { 
-                required: 'ফোন নম্বর আবশ্যক',
+              {...register("contactPhone", {
+                required: "ফোন নম্বর আবশ্যক",
                 pattern: {
                   value: /^01[3-9]\d{8}$/,
-                  message: 'সঠিক বাংলাদেশী ফোন নম্বর দিন (01XXXXXXXXX)'
-                }
+                  message: "সঠিক বাংলাদেশী ফোন নম্বর দিন (01XXXXXXXXX)",
+                },
               })}
               placeholder="01XXXXXXXXX"
             />
             {errors.contactPhone && (
-              <p className="text-red-500 text-sm">{errors.contactPhone.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.contactPhone.message}
+              </p>
             )}
           </div>
 
@@ -244,15 +283,20 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
             <Label htmlFor="medicalCondition">রোগের বিবরণ *</Label>
             <Textarea
               id="medicalCondition"
-              {...register('medicalCondition', { 
-                required: 'রোগের বিবরণ আবশ্যক',
-                minLength: { value: 10, message: 'বিস্তারিত বিবরণ দিন (কমপক্ষে ১০ অক্ষর)' }
+              {...register("medicalCondition", {
+                required: "রোগের বিবরণ আবশ্যক",
+                minLength: {
+                  value: 5,
+                  message: "বিস্তারিত বিবরণ দিন (কমপক্ষে 5 অক্ষর)",
+                },
               })}
               placeholder="কেন রক্ত লাগছে তার বিস্তারিত বিবরণ"
               rows={3}
             />
             {errors.medicalCondition && (
-              <p className="text-red-500 text-sm">{errors.medicalCondition.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.medicalCondition.message}
+              </p>
             )}
           </div>
 
@@ -261,7 +305,7 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
             <Label htmlFor="additionalNotes">অতিরিক্ত তথ্য (ঐচ্ছিক)</Label>
             <Textarea
               id="additionalNotes"
-              {...register('additionalNotes')}
+              {...register("additionalNotes")}
               placeholder="অন্য কোনো প্রয়োজনীয় তথ্য"
               rows={2}
             />
@@ -287,12 +331,10 @@ const BloodRequestForm = ({donor,isOpen,onClose,}: BloodRequestFormProps) => {
               disabled={isLoading}
               className="flex-1 bg-red-600 hover:bg-red-700"
             >
-              {isLoading ? 'পাঠানো হচ্ছে...' : 'অনুরোধ পাঠান'}
+              {isLoading ? "পাঠানো হচ্ছে..." : "অনুরোধ পাঠান"}
             </Button>
           </div>
         </div>
-
-
       </DialogContent>
     </Dialog>
   );

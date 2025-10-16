@@ -137,9 +137,7 @@ const RequestHistorySection = () => {
                       {request.donorId?.bloodGroup || "N/A"}
                     </Badge>
                     <div className="flex flex-col md:flex-row lg:flex-col space-y-2 md:space-y-0 md:space-x-2 lg:space-x-0 lg:space-y-2">
-                      <Button size="sm" variant="outline" className="text-xs bg-transparent">
-                        View Details
-                      </Button>
+                     
                       {request.status === "Pending" && (
                         <Button
                         onClick={() => handleCancelRequest(request._id)}

@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useLogoutMutation } from "@/redux/features/auth/authApi";
-import { persistor } from "@/redux/store"; // ✅ Import persistor
+import { persistor } from "@/redux/store";
 import { toast } from "sonner";
 
 const Navbar = () => {
@@ -25,20 +35,16 @@ const Navbar = () => {
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { token } = useAppSelector((state) => state.auth);
+  
+  // ✅ Get user data from Redux
+  const { token, user } = useAppSelector((state) => state.auth);
   const [logoutApi, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   const handleLogout = async () => {
     try {
-      // ✅ Backend API call করে cookie মুছে ফেলুন
       await logoutApi({}).unwrap();
-
-      // ✅ Redux store থেকে user data মুছে ফেলুন
       dispatch(logout());
-
-      // ✅ Redux Persist storage পুরোপুরি পরিষ্কার করুন
       await persistor.purge();
-
       toast.success("সফলভাবে লগআউট হয়েছে");
       navigate("/");
     } catch (error) {
@@ -61,8 +67,17 @@ const Navbar = () => {
     { href: "/become-a-donor-page", label: "রক্তদান করুন" },
     { href: "/about-page", label: "আমাদের সম্পর্কে" },
     { href: "/contact-page", label: "যোগাযোগ" },
-    { href: "/dashboard/user", label: "ড্যাশবোর্ড" },
   ];
+
+  // ✅ Get user initials for avatar
+  const getUserInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <header
@@ -75,6 +90,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
+          {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
               <div className="w-12 h-12 bg-gradient-to-br from-red-500 via-red-600 to-red-700 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 group-hover:scale-110 group-hover:shadow-xl group-hover:shadow-red-500/30">
@@ -110,17 +126,65 @@ const Navbar = () => {
             ))}
           </nav>
 
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Auth Section */}
           <div className="hidden lg:flex items-center space-x-4">
-            {token ? (
-              <Button
-                onClick={handleLogout}
-                disabled={isLoggingOut}
-                variant="outline"
-                className="cursor-pointer border-red-500 text-red-600 hover:bg-red-500 hover:text-white transition-all duration-300 hover:scale-105"
-              >
-                {isLoggingOut ? "লগআউট হচ্ছে..." : "লগআউট"}
-              </Button>
+            {token && user ? (
+              <>
+                {/* Dashboard Link */}
+                <Link to="/dashboard/user">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="border-red-200 text-red-600 hover:bg-red-50 transition-all duration-300"
+                  >
+                    ড্যাশবোর্ড
+                  </Button>
+                </Link>
+
+                {/* User Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="relative h-10 w-10 rounded-full hover:bg-red-50 transition-all duration-300"
+                    >
+                      <Avatar className="h-10 w-10 ring-2 ring-red-200 hover:ring-red-400 transition-all">
+                        <AvatarImage src={`/avatars/${user.name?.split(" ")[0]?.toLowerCase()}.png`} />
+                        <AvatarFallback className="bg-gradient-to-br from-red-500 to-red-600 text-white font-semibold text-sm">
+                          {getUserInitials(user.name || "U")}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-semibold">{user.name}</p>
+                        <p className="text-xs text-muted-foreground">{user.email}</p>
+                        <Badge variant="outline" className="w-fit text-xs mt-1">
+                          {user.role === 'donor' ? 'রক্তদাতা' : user.role === 'admin' ? 'অ্যাডমিন' : 'ইউজার'}
+                        </Badge>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link to="/dashboard/user" className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        <span>প্রোফাইল</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={handleLogout}
+                      disabled={isLoggingOut}
+                      className="cursor-pointer text-red-600 focus:text-red-600"
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>{isLoggingOut ? "লগআউট হচ্ছে..." : "লগআউট"}</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : (
               <>
                 <Link to="/login-page">
@@ -167,11 +231,33 @@ const Navbar = () => {
           className={cn(
             "lg:hidden overflow-hidden transition-all duration-500 ease-in-out",
             isOpen
-              ? "max-h-[500px] opacity-100 mt-4 transform-none"
+              ? "max-h-[600px] opacity-100 mt-4 transform-none"
               : "max-h-0 opacity-0 -translate-y-4"
           )}
         >
           <nav className="flex flex-col space-y-2 py-4 mt-2 border-t border-red-100 bg-white rounded-lg shadow-md">
+            {/* Mobile User Info */}
+            {token && user && (
+              <div className="px-6 py-3 mb-2 bg-red-50/50 rounded-lg mx-4 border border-red-100">
+                <div className="flex items-center space-x-3">
+                  <Avatar className="h-12 w-12 ring-2 ring-red-200">
+                    <AvatarImage src={`/avatars/${user.name?.split(" ")[0]?.toLowerCase()}.png`} />
+                    <AvatarFallback className="bg-gradient-to-br from-red-500 to-red-600 text-white font-semibold">
+                      {getUserInitials(user.name || "U")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-800 truncate">{user.name}</p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    <Badge variant="outline" className="text-xs mt-1">
+                      {user.role === 'donor' ? 'রক্তদাতা' : user.role === 'admin' ? 'অ্যাডমিন' : 'ইউজার'}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Items */}
             {navItems.map((item) => (
               <NavLink
                 key={item.href}
@@ -187,18 +273,28 @@ const Navbar = () => {
 
             {/* Mobile Auth Buttons */}
             <div className="flex flex-col space-y-3 px-6 pt-4 mt-2 border-t border-red-100">
-              {token ? (
-                <Button
-                  onClick={() => {
-                    handleLogout();
-                    setIsOpen(false);
-                  }}
-                  disabled={isLoggingOut}
-                  variant="outline"
-                  className="w-full border-red-500 text-red-600 hover:bg-red-500 hover:text-white"
-                >
-                  {isLoggingOut ? "লগআউট হচ্ছে..." : "লগআউট"}
-                </Button>
+              {token && user ? (
+                <>
+                  <Link to="/dashboard/user" onClick={() => setIsOpen(false)}>
+                    <Button
+                      variant="outline"
+                      className="w-full border-red-200 text-red-600 hover:bg-red-50 transition-all"
+                    >
+                      ড্যাশবোর্ড
+                    </Button>
+                  </Link>
+                  <Button
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                    disabled={isLoggingOut}
+                    variant="outline"
+                    className="w-full border-red-500 text-red-600 hover:bg-red-500 hover:text-white"
+                  >
+                    {isLoggingOut ? "লগআউট হচ্ছে..." : "লগআউট"}
+                  </Button>
+                </>
               ) : (
                 <>
                   <Link to="/login-page" onClick={() => setIsOpen(false)}>

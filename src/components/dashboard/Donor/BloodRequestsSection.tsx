@@ -7,8 +7,10 @@ import { MapPin, Phone, Clock,  CheckCircle, Loader2 } from "lucide-react"
 import { useGetRequestsForDonorQuery, useAcceptBloodRequestMutation } from "@/redux/features/bloodRequest/requestApi"
 import { useState } from "react"
 import { toast } from "sonner"
+import { useNavigate } from "react-router-dom"
 
 const BloodRequestsSection = () => {
+  const navigate = useNavigate()
   const [filters, setFilters] = useState({
     page: 1,
     limit: 10,
@@ -183,8 +185,11 @@ const BloodRequestsSection = () => {
                           Accept Request
                         </Button>
                         <div className="flex space-x-1">
-                          <Button size="sm" variant="outline" className="text-xs flex-1 bg-transparent">
-                            Details
+                          <Button
+                              onClick={() => navigate(`/dashboard/donor/request-details/${request._id}`)}
+
+                           size="sm" variant="outline" className="text-xs flex-1 bg-transparent">
+                            View Details
                           </Button>
                           <Button 
                             size="sm" 

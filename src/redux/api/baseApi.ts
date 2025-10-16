@@ -70,6 +70,6 @@ const baseQueryWithReauth: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['donors', 'requests', 'profile'],
+  tagTypes: ['donors', 'requests', 'profile','BloodRequest'],
   endpoints: () => ({}),
 });

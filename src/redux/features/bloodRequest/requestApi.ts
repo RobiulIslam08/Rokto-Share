@@ -131,6 +131,18 @@ const requestApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['requests'],
     }),
+       getDonorDonationHistory: builder.query({
+        query: (params) => ({
+          url: '/requests/donor/donation-history',
+          method: 'GET',
+          params: {
+            page: params?.page || 1,
+            limit: params?.limit || 10,
+            status: params?.status || 'Completed',
+          },
+        }),
+        providesTags: ['BloodRequest'],
+      }),
   }),
 });
 
@@ -147,6 +159,7 @@ export const {
   useRejectBloodRequestMutation,
   useCompleteBloodRequestMutation,
   useCancelBloodRequestMutation,
+  useGetDonorDonationHistoryQuery
 } = requestApi;
 
 export default requestApi;

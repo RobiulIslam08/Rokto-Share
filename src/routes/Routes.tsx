@@ -86,7 +86,7 @@ export const router = createBrowserRouter([
       // Common Routes for all roles
       { path: "profile", element: <ProfileSection userRole="user" /> },
       { path: "messages", element: <MessagesSection userRole="user" /> },
-      { path: "settings", element: <SettingsSection /> },
+      
       {
             path: "request-details/:id",
             element: <BloodRequestDetailsPage />,
@@ -100,6 +100,7 @@ export const router = createBrowserRouter([
           { path: "users", element: <UserManagementSection /> },
           { path: "donors", element: <DonorManagementSection /> },
           { path: "requests", element: <RequestManagementSection /> },
+          { path: "settings", element: <SettingsSection /> },
         ],
       },
 

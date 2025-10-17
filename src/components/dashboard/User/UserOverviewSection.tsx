@@ -24,10 +24,14 @@ import {
 import { userRequestHistory } from "@/lib/dashboard/user/userData";
 import { useAppSelector } from "@/redux/hook";
 import { selectCurrentUser } from "@/redux/features/auth/authSlice";
+import { useGetUserProfileQuery } from "@/redux/features/user/userApi";
 
 const UserOverviewSection = () => {
-  const currenUser = useAppSelector(selectCurrentUser)
-  console.log(currenUser, 'from overview')
+  const currenUser = useAppSelector(selectCurrentUser);
+  const { data: userProfileData } = useGetUserProfileQuery(undefined, {
+    skip: false,
+  });
+  console.log(userProfileData)
   return (
     <div className="space-y-6 md:space-y-8 animate-slide-up">
       {/* Welcome Header */}
@@ -52,7 +56,7 @@ const UserOverviewSection = () => {
                   className="border-blue-200 text-blue-700"
                 >
                   <Droplets className="w-3 h-3 mr-1" />
-                  Blood Type: O+
+                  Blood Type: {userProfileData?.data?.bloodGroup}
                 </Badge>
               </div>
             </div>

@@ -1,9 +1,8 @@
-
 "use client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Heart,  Menu } from "lucide-react";
+import { Heart, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/redux/hook";
 import type { UserRole } from "@/types";
@@ -25,18 +24,24 @@ export const DashboardHeader = ({
 }: DashboardHeaderProps) => {
   // ✅ Get logged-in user data from Redux
   const { user } = useAppSelector((state) => state.auth);
-const {data:userProfileData } = useGetUserProfileQuery(undefined, {
-    skip: !user || userRole !== 'donor', // শুধুমাত্র donor হলে fetch করবে
-  })
+  const {
+    data: userProfileData,
+   
+  } = useGetUserProfileQuery(undefined, {
+    skip: false,
+  });
+
+
   // ✅ Real user data (demo data removed)
   const currentUser = {
     name: user?.name || "Guest User",
     email: user?.email || "",
     role: user?.role || userRole,
-    bloodType: "O+" // TODO: This should come from user profile API
+    bloodType: userProfileData?.data?.bloodGroup || null,
   };
 
-  const title = currentUser.role === "admin" ? "RoktoShare Admin" : "RoktoShare";
+  const title =
+    currentUser.role === "admin" ? "RoktoShare Admin" : "RoktoShare";
   const subtitle =
     currentUser.role === "admin"
       ? "Admin Panel"
@@ -95,8 +100,6 @@ const {data:userProfileData } = useGetUserProfileQuery(undefined, {
             </div>
           )}
 
-       
-
           {/* ✅ User Profile Section with Real Data */}
           <div className="flex items-center space-x-3">
             <Avatar className="h-12 w-12 ring-2 ring-primary/20">
@@ -122,10 +125,17 @@ const {data:userProfileData } = useGetUserProfileQuery(undefined, {
               )}
               <div className="flex items-center gap-2 mt-1">
                 <Badge variant="outline" className="text-xs">
-                  {currentUser.role === 'donor' ? 'Donor' : currentUser.role === 'admin' ? 'Admin' : 'User'}
+                  {currentUser.role === "donor"
+                    ? "Donor"
+                    : currentUser.role === "admin"
+                    ? "Admin"
+                    : "User"}
                 </Badge>
                 {currentUser.bloodType && (
-                  <Badge variant="outline" className="text-xs text-red-600 border-red-300">
+                  <Badge
+                    variant="outline"
+                    className="text-xs text-red-600 border-red-300"
+                  >
                     {currentUser.bloodType}
                   </Badge>
                 )}

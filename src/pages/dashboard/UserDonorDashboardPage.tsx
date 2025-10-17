@@ -286,7 +286,7 @@ export  const UserDonorDashboardPage =  () => {
             {activeTab === "history" && (userRole === "user" ? <RequestHistorySection /> : <DonationHistorySection />)}
             {activeTab === "donors" && userRole === "user" && <FindDonorsSection />}
             {activeTab === "messages" && <MessagesSection userRole={userRole} />}
-            {activeTab === "profile" && <ProfileSection userRole={userRole} />}
+            {activeTab === "profile" && <ProfileSection />}
           </div>
         </main>
       </div>

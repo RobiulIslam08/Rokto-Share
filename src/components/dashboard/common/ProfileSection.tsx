@@ -1,8 +1,11 @@
 // src/components/dashboard/ProfileSection.tsx
 "use client";
 
-import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
+import { useEffect } from "react";
 import { useAppSelector } from "@/redux/hook";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import {
   Card,
@@ -24,10 +27,32 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Star, CheckCircle, Award, Users, Loader2 } from "lucide-react";
+import { Star, CheckCircle, Award, Users, Loader2, Bell, Trophy } from "lucide-react";
+import {
+  useGetUserProfileQuery,
+  useUpdateUserProfileMutation,
+} from "@/redux/features/user/userApi";
 import { toast } from "sonner";
-import { useGetUserProfileQuery, useUpdateUserProfileMutation } from "@/redux/features/user/userApi";
 
+// 1. Define Zod schema for validation - FIXED
+const profileFormSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  phone: z
+    .string()
+    .regex(/^01[3-9]\d{8}$/, "Invalid Bangladesh phone number"),
+  email: z.string().email(),
+  age: z.string().optional(),
+  weight: z.string().optional(),
+  division: z.string().min(1, "Division is required"),
+  district: z.string().min(1, "District is required"),
+  upazila: z.string().min(1, "Upazila is required"),
+  medicalHistory: z.string().optional(),
+  lastDonationDate: z.string().optional(),
+  isAvailable: z.enum(["available", "unavailable"]),
+});
+
+// Infer the type from the schema
+type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 // Helper to get initials
 const getInitials = (name: string = "") => {
@@ -37,38 +62,42 @@ const getInitials = (name: string = "") => {
   return (words[0][0] + words[words.length - 1][0]).toUpperCase();
 };
 
-export const ProfileSection = () => {
-  // 1. Get base auth user (for role and ID)
+ const ProfileSection = () => {
+  // 1. Get auth user and profile data
   const { user: authUser } = useAppSelector((state) => state.auth);
   const userRole = authUser?.role || "user";
-
-  // 2. Fetch detailed profile data using RTK Query
   const { data: profileData, isLoading } = useGetUserProfileQuery(undefined);
-
-  // 3. Get the update mutation hook
   const [updateUserProfile, { isLoading: isUpdating }] =
     useUpdateUserProfileMutation();
 
-  // 4. Local state for the profile form
-  // ✅ Updated to match your UserProfile schema
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    age: "",
-    weight: "",
-    division: "",
-    district: "",
-    upazila: "",
-    medicalHistory: "",
-    lastDonationDate: "",
+  // 2. Setup react-hook-form with explicit type - FIXED
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileFormSchema),
+    defaultValues: {
+      name: "",
+      phone: "",
+      email: "",
+      age: "",
+      weight: "",
+      division: "",
+      district: "",
+      upazila: "",
+      medicalHistory: "",
+      lastDonationDate: "",
+      isAvailable: "available",
+    },
   });
 
-  // 5. Populate form when RTK query data (profileData) loads
+  // 3. Populate form when data loads using reset()
   useEffect(() => {
     if (profileData?.data) {
       const { user, location, ...profile } = profileData.data;
-      setFormData({
+      reset({
         name: user.name || "",
         phone: user.phone || "",
         email: user.email || "",
@@ -81,42 +110,25 @@ export const ProfileSection = () => {
         lastDonationDate: profile.lastDonationDate
           ? new Date(profile.lastDonationDate).toISOString().split("T")[0]
           : "",
+        isAvailable: profile.isAvailable ? "available" : "unavailable",
       });
     }
-  }, [profileData]);
+  }, [profileData, reset]);
 
-  // 6. Handle form input changes
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-  
-  // Handle select component change
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  // 7. Handle form submission
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    
-    // Prepare payload matching the backend schema
+  // 4. Handle form submission - FIXED
+  const onFormSubmit = async (data: ProfileFormValues) => {
     const payload = {
-      // Base user info
-      name: formData.name,
-      phone: formData.phone,
-      // Profile info
-      age: Number(formData.age) || undefined,
-      weight: Number(formData.weight) || undefined,
-      medicalHistory: formData.medicalHistory,
-      lastDonationDate: formData.lastDonationDate || undefined,
-      // Nested location object
+      name: data.name,
+      phone: data.phone,
+      age: Number(data.age) || undefined,
+      weight: Number(data.weight) || undefined,
+      medicalHistory: data.medicalHistory || undefined,
+      lastDonationDate: data.lastDonationDate || undefined,
+      isAvailable: data.isAvailable === "available",
       location: {
-        division: formData.division,
-        district: formData.district,
-        upazila: formData.upazila,
+        division: data.division,
+        district: data.district,
+        upazila: data.upazila,
       },
     };
 
@@ -172,7 +184,7 @@ export const ProfileSection = () => {
       <div className="grid gap-6 md:gap-8 lg:grid-cols-3">
         {/* Left Column */}
         <div className="lg:col-span-2 space-y-6">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle>Personal Information</CardTitle>
@@ -182,12 +194,16 @@ export const ProfileSection = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Full Name</Label>
-                    <Input
-                      id="name"
+                    <Controller
                       name="name"
-                      value={formData.name}
-                      onChange={handleChange}
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} id="name" />
+                      )}
                     />
+                    {errors.name && (
+                      <p className="text-sm text-red-500">{errors.name.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="bloodType">Blood Type</Label>
@@ -199,82 +215,109 @@ export const ProfileSection = () => {
                     />
                   </div>
                 </div>
+
                 {/* Phone & Email */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
+                    <Controller
                       name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} id="phone" />
+                      )}
                     />
+                    {errors.phone && (
+                      <p className="text-sm text-red-500">{errors.phone.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                    <Input
-                      id="email"
+                    <Controller
                       name="email"
-                      type="email"
-                      value={formData.email}
-                      disabled // Email usually not editable
-                      className="cursor-not-allowed"
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} id="email" disabled />
+                      )}
                     />
+                    {errors.email && (
+                      <p className="text-sm text-red-500">{errors.email.message}</p>
+                    )}
                   </div>
                 </div>
+
                 {/* Age & Weight (Donor only) */}
                 {userRole === "donor" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="age">Age</Label>
-                      <Input
-                        id="age"
+                      <Controller
                         name="age"
-                        type="number"
-                        value={formData.age}
-                        onChange={handleChange}
+                        control={control}
+                        render={({ field }) => (
+                          <Input {...field} id="age" type="number" />
+                        )}
                       />
+                      {errors.age && (
+                        <p className="text-sm text-red-500">{errors.age.message}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="weight">Weight (kg)</Label>
-                      <Input
-                        id="weight"
+                      <Controller
                         name="weight"
-                        type="number"
-                        value={formData.weight}
-                        onChange={handleChange}
+                        control={control}
+                        render={({ field }) => (
+                          <Input {...field} id="weight" type="number" />
+                        )}
                       />
+                      {errors.weight && (
+                        <p className="text-sm text-red-500">{errors.weight.message}</p>
+                      )}
                     </div>
                   </div>
                 )}
-                {/* Location Fields (matches schema) */}
+
+                {/* Location Fields */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="division">Division</Label>
-                    <Input
-                      id="division"
+                    <Controller
                       name="division"
-                      value={formData.division}
-                      onChange={handleChange}
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} id="division" />
+                      )}
                     />
+                    {errors.division && (
+                      <p className="text-sm text-red-500">{errors.division.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="district">District</Label>
-                    <Input
-                      id="district"
+                    <Controller
                       name="district"
-                      value={formData.district}
-                      onChange={handleChange}
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} id="district" />
+                      )}
                     />
+                    {errors.district && (
+                      <p className="text-sm text-red-500">{errors.district.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="upazila">Upazila</Label>
-                    <Input
-                      id="upazila"
+                    <Controller
                       name="upazila"
-                      value={formData.upazila}
-                      onChange={handleChange}
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} id="upazila" />
+                      )}
                     />
+                    {errors.upazila && (
+                      <p className="text-sm text-red-500">{errors.upazila.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -300,20 +343,30 @@ export const ProfileSection = () => {
                 <CardTitle>Emergency Contacts</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="contact1-name">Primary Contact Name</Label>
-                    <Input id="contact1-name" placeholder="e.g., Jane Doe" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="contact1-phone">Primary Contact Phone</Label>
-                    <Input
-                      id="contact1-phone"
-                      placeholder="+880 1XXX-XXXXXX"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="emergency-name">Contact Name</Label>
+                  <Input
+                    id="emergency-name"
+                    placeholder="Enter emergency contact name"
+                  />
                 </div>
-                <Button variant="outline">Save Emergency Contacts</Button>
+                <div className="space-y-2">
+                  <Label htmlFor="emergency-phone">Contact Phone</Label>
+                  <Input
+                    id="emergency-phone"
+                    placeholder="Enter emergency contact phone"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="emergency-relation">Relationship</Label>
+                  <Input
+                    id="emergency-relation"
+                    placeholder="e.g., Spouse, Parent, Sibling"
+                  />
+                </div>
+                <Button variant="outline" className="w-full">
+                  Save Emergency Contact
+                </Button>
               </CardContent>
             </Card>
           ) : (
@@ -325,42 +378,75 @@ export const ProfileSection = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="lastDonationDate">Last Donation Date</Label>
-                    <Input
-                      id="lastDonationDate"
+                    <Controller
                       name="lastDonationDate"
-                      value={formData.lastDonationDate}
-                      onChange={handleChange}
-                      type="date"
+                      control={control}
+                      render={({ field }) => (
+                        <Input {...field} id="lastDonationDate" type="date" />
+                      )}
                     />
+                    {errors.lastDonationDate && (
+                      <p className="text-sm text-red-500">
+                        {errors.lastDonationDate.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="availability">Availability</Label>
-                    <Select
-                      defaultValue={profile.isAvailable ? "available" : "unavailable"}
-                      onValueChange={(value) => handleSelectChange('isAvailable', value)}
-                    >
-                      <SelectTrigger id="availability">
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="available">Available</SelectItem>
-                        <SelectItem value="unavailable">Unavailable</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label htmlFor="isAvailable">Availability</Label>
+                    <Controller
+                      name="isAvailable"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <SelectTrigger id="isAvailable">
+                            <SelectValue placeholder="Select status" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="available">Available</SelectItem>
+                            <SelectItem value="unavailable">Unavailable</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                    {errors.isAvailable && (
+                      <p className="text-sm text-red-500">
+                        {errors.isAvailable.message}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="medicalHistory">Medical Conditions</Label>
-                  <Textarea
-                    id="medicalHistory"
+                  <Controller
                     name="medicalHistory"
-                    value={formData.medicalHistory}
-                    onChange={handleChange}
-                    placeholder="List any medical conditions or medications..."
+                    control={control}
+                    render={({ field }) => (
+                      <Textarea
+                        {...field}
+                        id="medicalHistory"
+                        placeholder="List any medical conditions or medications..."
+                      />
+                    )}
                   />
+                  {errors.medicalHistory && (
+                    <p className="text-sm text-red-500">
+                      {errors.medicalHistory.message}
+                    </p>
+                  )}
                 </div>
-                <Button variant="outline" onClick={handleSubmit} disabled={isUpdating}>
-                  {isUpdating ? <Loader2 className="h-4 w-4 animate-spin" /> : "Update Health Info"}
+                <Button
+                  variant="outline"
+                  onClick={handleSubmit(onFormSubmit)}
+                  disabled={isUpdating}
+                >
+                  {isUpdating ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Update Health Info"
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -420,6 +506,21 @@ export const ProfileSection = () => {
                 {userRole === "donor" && (
                   <>
                     <div className="flex items-center justify-between">
+                      <span className="text-sm">Availability</span>
+                      <Badge
+                        variant={
+                          profile.isAvailable ? "default" : "destructive"
+                        }
+                        className={
+                          profile.isAvailable
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
+                        }
+                      >
+                        {profile.isAvailable ? "Available" : "Unavailable"}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center justify-between">
                       <span className="text-sm">Donor Level</span>
                       <Badge className="bg-yellow-500 hover:bg-yellow-600">
                         <Award className="w-3 h-3 mr-1" />
@@ -429,7 +530,6 @@ export const ProfileSection = () => {
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Total Donations</span>
                       <Badge variant="outline">
-                        {/* ✅ Correct field from UserProfile schema */}
                         {profile.previousDonations || 0}
                       </Badge>
                     </div>
@@ -443,34 +543,39 @@ export const ProfileSection = () => {
           {userRole === "donor" ? (
             <Card className="border-0 shadow-lg">
               <CardHeader>
-                <CardTitle>Achievements</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Trophy className="h-5 w-5 text-yellow-500" />
+                  Achievements
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                  <Award className="h-6 w-6 text-yellow-500" />
-                  <div>
-                    <p className="font-medium text-sm">Hero Donor</p>
-                    <p className="text-xs text-muted-foreground">
-                      {profile.previousDonations || 0}+ donations
-                    </p>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
+                    <Award className="h-8 w-8 text-yellow-500" />
+                    <div>
+                      <p className="font-semibold text-sm">Life Saver</p>
+                      <p className="text-xs text-muted-foreground">
+                        Completed 5 donations
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  <Star className="h-6 w-6 text-blue-500" />
-                  <div>
-                    <p className="font-medium text-sm">5-Star Donor</p>
-                    <p className="text-xs text-muted-foreground">
-                      Excellent rating
-                    </p>
+                  <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                    <Star className="h-8 w-8 text-blue-500" />
+                    <div>
+                      <p className="font-semibold text-sm">Quick Responder</p>
+                      <p className="text-xs text-muted-foreground">
+                        Responded within 30 mins
+                      </p>
+                    </div>
                   </div>
-                </div>
-                 <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                  <Users className="h-6 w-6 text-green-500" />
-                  <div>
-                    <p className="font-medium text-sm">Life Saver</p>
-                    <p className="text-xs text-muted-foreground">
-                      {(profile.previousDonations || 0) * 3}+ lives impacted
-                    </p>
+                  <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                    <Users className="h-8 w-8 text-green-500" />
+                    <div>
+                      <p className="font-semibold text-sm">Community Hero</p>
+                      <p className="text-xs text-muted-foreground">
+                        10+ donations milestone
+                      </p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -478,33 +583,44 @@ export const ProfileSection = () => {
           ) : (
             <Card className="border-0 shadow-lg">
               <CardHeader>
-                <CardTitle>Notification Settings</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Bell className="h-5 w-5" />
+                  Notification Settings
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="sms" defaultChecked />
-                  <Label htmlFor="sms" className="text-sm font-normal">
-                    SMS Notifications
-                  </Label>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-sm">Email Notifications</p>
+                      <p className="text-xs text-muted-foreground">
+                        Receive updates via email
+                      </p>
+                    </div>
+                    <Checkbox defaultChecked />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-sm">SMS Notifications</p>
+                      <p className="text-xs text-muted-foreground">
+                        Receive urgent alerts via SMS
+                      </p>
+                    </div>
+                    <Checkbox defaultChecked />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-sm">Request Updates</p>
+                      <p className="text-xs text-muted-foreground">
+                        Get notified about request status
+                      </p>
+                    </div>
+                    <Checkbox defaultChecked />
+                  </div>
+                  <Button variant="outline" size="sm" className="w-full mt-2">
+                    Save Preferences
+                  </Button>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="email-updates" defaultChecked />
-                  <Label
-                    htmlFor="email-updates"
-                    className="text-sm font-normal"
-                  >
-                    Email Updates
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="emergency" defaultChecked />
-                  <Label htmlFor="emergency" className="text-sm font-normal">
-                    Emergency Alerts
-                  </Label>
-                </div>
-                <Button variant="outline" className="w-full">
-                  Save Preferences
-                </Button>
               </CardContent>
             </Card>
           )}
@@ -513,3 +629,5 @@ export const ProfileSection = () => {
     </div>
   );
 };
+
+export default ProfileSection

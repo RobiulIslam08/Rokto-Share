@@ -6,7 +6,7 @@ import {
   Calendar,
   CheckCircle,
   Droplets,
-  Filter,
+ 
   MapPin,
   Plus,
   User,
@@ -19,7 +19,7 @@ import {
 } from "@/redux/features/bloodRequest/requestApi";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const RequestHistorySection = () => {
     const navigate = useNavigate();
@@ -66,14 +66,13 @@ const RequestHistorySection = () => {
           </p>
         </div>
         <div className="flex flex-col md:flex-row items-stretch md:items-center space-y-2 md:space-y-0 md:space-x-2">
-          <Button variant="outline" size="sm" className="bg-transparent">
-            <Filter className="mr-2 h-4 w-4" />
-            Filter
-          </Button>
+         
+          <Link to="/become-a-donor-page">
           <Button size="sm" className="bg-red-500 hover:bg-red-600">
             <Plus className="mr-2 h-4 w-4" />
             New Request
           </Button>
+          </Link>
         </div>
       </div>
 

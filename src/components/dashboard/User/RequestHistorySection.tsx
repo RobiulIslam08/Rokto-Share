@@ -6,7 +6,6 @@ import {
   Calendar,
   CheckCircle,
   Droplets,
- 
   MapPin,
   Plus,
   User,
@@ -22,7 +21,7 @@ import { toast } from "sonner";
 import { Link, useNavigate } from "react-router-dom";
 
 const RequestHistorySection = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useGetMyBloodRequestsQuery({
     page: 1,
     limit: 10,
@@ -41,13 +40,13 @@ const RequestHistorySection = () => {
   };
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading...</div>;
+    return <div className="text-center py-10">Thinking...</div>;
   }
 
   if (isError) {
     return (
       <div className="text-center py-10 text-red-500">
-        Error loading requests!
+        Loading requests failed!
       </div>
     );
   }
@@ -66,12 +65,11 @@ const RequestHistorySection = () => {
           </p>
         </div>
         <div className="flex flex-col md:flex-row items-stretch md:items-center space-y-2 md:space-y-0 md:space-x-2">
-         
           <Link to="/become-a-donor-page">
-          <Button size="sm" className="bg-red-500 hover:bg-red-600">
-            <Plus className="mr-2 h-4 w-4" />
-            New Request
-          </Button>
+            <Button size="sm" className="bg-red-500 hover:bg-red-600">
+              <Plus className="mr-2 h-4 w-4" />
+              New Request
+            </Button>
           </Link>
         </div>
       </div>
@@ -177,7 +175,9 @@ const RequestHistorySection = () => {
                     </Badge>
                     <div className="flex flex-col md:flex-row lg:flex-col space-y-2 md:space-y-0 md:space-x-2 lg:space-x-0 lg:space-y-2">
                       <Button
-                       onClick={() => navigate(`/dashboard/request-details/${request._id}`)}
+                        onClick={() =>
+                          navigate(`/dashboard/request-details/${request._id}`)
+                        }
                         size="sm"
                         variant="outline"
                         className="text-xs bg-transparent"

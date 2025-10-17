@@ -71,7 +71,7 @@ const DonorRequestDetailsPage = () => {
       <div className="container mx-auto py-10">
         <div className="flex items-center justify-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <span className="ml-2">Loading request details...</span>
+          <span className="ml-2">Thinking request details...</span>
         </div>
       </div>
     );

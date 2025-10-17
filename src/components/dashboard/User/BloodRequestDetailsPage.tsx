@@ -31,6 +31,7 @@ import { useAppSelector } from "@/redux/hook";
 
 const BloodRequestDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  console.log('details page', id)
   const navigate = useNavigate();
   const currentUser = useAppSelector(selectCurrentUser);
 
@@ -68,7 +69,7 @@ const BloodRequestDetailsPage = () => {
   if (isLoading) {
     return (
       <div className="container mx-auto py-10">
-        <div className="text-center">Loading request details...</div>
+        <div className="text-center">Thinking request details...</div>
       </div>
     );
   }
@@ -97,6 +98,7 @@ const BloodRequestDetailsPage = () => {
   }
 
   const request = data.data;
+  console.log('request data',request)
   const isRequester = request.userId?._id === currentUser?._id;
 
   return (

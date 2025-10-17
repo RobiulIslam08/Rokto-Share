@@ -7,6 +7,7 @@ import { Heart,  Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/redux/hook";
 import type { UserRole } from "@/types";
+import { useGetUserProfileQuery } from "@/redux/features/user/userApi";
 
 interface DashboardHeaderProps {
   sidebarOpen: boolean;
@@ -24,7 +25,9 @@ export const DashboardHeader = ({
 }: DashboardHeaderProps) => {
   // ✅ Get logged-in user data from Redux
   const { user } = useAppSelector((state) => state.auth);
-
+const {data:userProfileData } = useGetUserProfileQuery(undefined, {
+    skip: !user || userRole !== 'donor', // শুধুমাত্র donor হলে fetch করবে
+  })
   // ✅ Real user data (demo data removed)
   const currentUser = {
     name: user?.name || "Guest User",

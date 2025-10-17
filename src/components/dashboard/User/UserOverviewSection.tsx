@@ -22,8 +22,12 @@ import {
   Target,
 } from "lucide-react";
 import { userRequestHistory } from "@/lib/dashboard/user/userData";
+import { useAppSelector } from "@/redux/hook";
+import { selectCurrentUser } from "@/redux/features/auth/authSlice";
 
 const UserOverviewSection = () => {
+  const currenUser = useAppSelector(selectCurrentUser)
+  console.log(currenUser, 'from overview')
   return (
     <div className="space-y-6 md:space-y-8 animate-slide-up">
       {/* Welcome Header */}
@@ -33,7 +37,7 @@ const UserOverviewSection = () => {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h2 className="text-2xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
-                Welcome Back, Ahmed!
+                Welcome Back, {currenUser?.name}!
               </h2>
               <p className="text-base md:text-lg text-muted-foreground mt-2">
                 Your blood donation journey continues

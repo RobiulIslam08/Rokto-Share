@@ -9,6 +9,8 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ['userProfile'],
     }),
+    // ✅ NEW: This mutation updates the profile
+  
   }),
 });
-export const {useGetUserProfileQuery} = userApi
+export const {useGetUserProfileQuery, useUpdateUserProfileMutation} = userApi

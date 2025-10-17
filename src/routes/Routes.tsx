@@ -12,7 +12,7 @@ import BloodRequestDetailsPage from "@/components/dashboard/User/BloodRequestDet
 import RequestHistorySection from "@/components/dashboard/User/RequestHistorySection";
 import UserOverviewSection from "@/components/dashboard/User/UserOverviewSection";
 import MessagesSection from "@/components/dashboard/common/MessagesSection";
-import ProfileSection from "@/components/dashboard/common/ProfileSection";
+import { ProfileSection } from "@/components/dashboard/common/ProfileSection";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
 import MainLayout from "@/components/layout/MainLayout";
@@ -84,7 +84,7 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       // Common Routes for all roles
-      { path: "profile", element: <ProfileSection userRole="user" /> },
+      { path: "profile", element: <ProfileSection/> },
       { path: "messages", element: <MessagesSection userRole="user" /> },
       
       {

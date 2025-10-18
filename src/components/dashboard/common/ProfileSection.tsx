@@ -26,8 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Star, CheckCircle, Award, Users, Loader2, Bell, Trophy } from "lucide-react";
+import {  CheckCircle, Award,  Loader2,  } from "lucide-react";
 import {
   useGetUserProfileQuery,
   useUpdateUserProfileMutation,
@@ -539,91 +538,7 @@ const getInitials = (name: string = "") => {
             </CardContent>
           </Card>
 
-          {/* Conditional Card: Achievements (donor) vs Notifications (user) */}
-          {userRole === "donor" ? (
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-yellow-500" />
-                  Achievements
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
-                    <Award className="h-8 w-8 text-yellow-500" />
-                    <div>
-                      <p className="font-semibold text-sm">Life Saver</p>
-                      <p className="text-xs text-muted-foreground">
-                        Completed 5 donations
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                    <Star className="h-8 w-8 text-blue-500" />
-                    <div>
-                      <p className="font-semibold text-sm">Quick Responder</p>
-                      <p className="text-xs text-muted-foreground">
-                        Responded within 30 mins
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                    <Users className="h-8 w-8 text-green-500" />
-                    <div>
-                      <p className="font-semibold text-sm">Community Hero</p>
-                      <p className="text-xs text-muted-foreground">
-                        10+ donations milestone
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <Card className="border-0 shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bell className="h-5 w-5" />
-                  Notification Settings
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-sm">Email Notifications</p>
-                      <p className="text-xs text-muted-foreground">
-                        Receive updates via email
-                      </p>
-                    </div>
-                    <Checkbox defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-sm">SMS Notifications</p>
-                      <p className="text-xs text-muted-foreground">
-                        Receive urgent alerts via SMS
-                      </p>
-                    </div>
-                    <Checkbox defaultChecked />
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-sm">Request Updates</p>
-                      <p className="text-xs text-muted-foreground">
-                        Get notified about request status
-                      </p>
-                    </div>
-                    <Checkbox defaultChecked />
-                  </div>
-                  <Button variant="outline" size="sm" className="w-full mt-2">
-                    Save Preferences
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
+     
         </div>
       </div>
     </div>

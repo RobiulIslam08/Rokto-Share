@@ -10,7 +10,7 @@ import type { RootState } from '../store';
 import { logout, setToken } from '../features/auth/authSlice';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `https://rokto-share-server-1.onrender.com/api/v1`,
+  baseUrl: 'http://localhost:5000/api/v1',
   credentials: 'include', // cookie পাঠানোর জন্য
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
